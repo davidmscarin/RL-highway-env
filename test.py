@@ -11,7 +11,7 @@ print("configuration dict of environment:")
 pprint.pprint(env.unwrapped.config)
 
 #example to change the number of lanes
-env.unwrapped.config["lanes_count"] = 2
+env.unwrapped.config['controlled_vehicles'] = 2
 env.reset()
 
 done = False
