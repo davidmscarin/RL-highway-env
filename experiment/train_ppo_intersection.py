@@ -34,12 +34,12 @@ if __name__ == "__main__":
         learning_rate=5e-4,
         gamma=0.9,
         verbose=2,
-        tensorboard_log="racetrack_ppo/",
+        tensorboard_log="intersection_ppo/",
     )
     # Train the model
     if TRAIN:
         model.learn(total_timesteps=int(5e5))
-        model.save("racetrack_ppo/model")
+        model.save("intersection_ppo/model")
         del model
 
     '''
