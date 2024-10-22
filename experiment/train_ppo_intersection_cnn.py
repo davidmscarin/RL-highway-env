@@ -31,14 +31,14 @@ if __name__ == "__main__":
         n_steps=batch_size * 12 // n_cpu,
         batch_size=batch_size,
         n_epochs=10,
-        learning_rate=5e-4,
+        learning_rate=3e-4,
         gamma=0.9,
         verbose=2,
         tensorboard_log="intersection_ppo_cnn/",
     )
     # Train the model
     if TRAIN:
-        model.learn(total_timesteps=int(5e5))
+        model.learn(total_timesteps=int(1e5))
         model.save("intersection_ppo_cnn/model")
         del model
 

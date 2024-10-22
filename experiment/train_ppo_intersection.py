@@ -12,20 +12,9 @@ TRAIN = True
 if __name__ == "__main__":
     n_cpu = 12
     batch_size = 64
-    env = gym.make(
-        "highway-fast-v0",
-        config={
-            "observation": {
-                "type": "GrayscaleObservation",
-                "observation_shape": (128, 64),
-                "stack_size": 4,
-                "weights": [0.2989, 0.5870, 0.1140],  # weights for RGB conversion
-                "scaling": 1.75,
-            },
-        },
-    )
+    env = make_vec_env("intersection-v1", n_envs=n_cpu, vec_env_cls=SubprocVecEnv)
     model = PPO(
-        "CnnPolicy",
+        "MlpPolicy",
         env,
         #policy_kwargs=dict(net_arch=[dict(pi=[256, 256], vf=[256, 256])]),
         n_steps=batch_size * 12 // n_cpu,
