@@ -5,6 +5,9 @@ import pprint
 import highway_env
 from matplotlib import pyplot as plt
 import numpy as np
+import pickle
+import warnings
+warnings.filterwarnings('ignore')
 #%matplotlib inline
 
 env_version = 'v0' #'v0' or 'v1'
@@ -41,8 +44,8 @@ if is_ipython:
 
 # if GPU is to be used
 device = torch.device(
-    "cuda" if torch.cuda.is_available() else
-    "mps" if torch.backends.mps.is_available() else
+    # "cuda" if torch.cuda.is_available() else
+    # "mps" if torch.backends.mps.is_available() else
     "cpu"
 )
 
@@ -129,6 +132,7 @@ def get_observation(obs):
     return torch_obs
 
 episode_durations = []
+episode_rewards = []
 
 
 def plot_durations(show_result=False):
@@ -161,7 +165,7 @@ def optimize_model():
     if len(memory) < BATCH_SIZE:
         return
     transitions = memory.sample(BATCH_SIZE)
-    print("transitions: ", transitions)
+    
     # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
     # detailed explanation). This converts batch-array of Transitions
     # to Transition of batch-arrays.
@@ -180,8 +184,7 @@ def optimize_model():
     # Compute Q(s_t, a) - the model computes Q(s_t), then we select the
     # columns of actions taken. These are the actions which would've been taken
     # for each batch state according to policy_net
-    print("action batch size: ", len(action_batch))
-    print("state batch size: ", len(state_batch))
+    
     
     state_action_values = policy_net(state_batch).gather(1, action_batch)
 
@@ -208,11 +211,8 @@ def optimize_model():
     optimizer.step()
 
 
-#training loop
-if torch.cuda.is_available() or torch.backends.mps.is_available():
-    num_episodes = 600
-else:
-    num_episodes = 50
+
+num_episodes = 10000
 
 for i_episode in range(num_episodes):
     # Initialize the environment and get its state
@@ -220,24 +220,22 @@ for i_episode in range(num_episodes):
     state = get_observation(state)
     print(f"state episode {i_episode}: ", state)
 
+    episode_reward = 0
+
     for t in count():
         print(f"running step {t}")
         action = select_action(state)
-        print("selected action: ", action)
         observation, reward, terminated, truncated, info = env.step(action.item())
         print("reward: ", reward)
+        episode_reward+=reward
         reward = torch.tensor([[reward]], device=device)
         done = terminated or truncated
-        env.render()
+        #env.render()
 
         if terminated:
             next_state = None
         else:
-            next_state = get_observation(observation)
-
-        print(len(state))
-        if next_state is not None:
-            print(len(next_state))   
+            next_state = get_observation(observation) 
 
         # Store the transition in memory
         memory.push(state, action, next_state, reward)
@@ -258,13 +256,64 @@ for i_episode in range(num_episodes):
 
         if done:
             episode_durations.append(t + 1)
+            episode_rewards.append(episode_reward)
             plot_durations()
             break
+        
+        # Save models and data every 1000 episodes
+        if (i_episode + 1) % 1000 == 0:
+            # Save model parameters using PyTorch
+            model_save_path = f"saved_models/model_episode_{i_episode+1}.pt"
+            torch.save({
+                'episode': i_episode,
+                'policy_net_state_dict': policy_net.state_dict(),
+                'target_net_state_dict': target_net.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'episode_rewards': episode_rewards,
+                'episode_durations': episode_durations
+            }, model_save_path)
+            
+            print(f"Saved checkpoint at episode {i_episode+1}")
+
+        #code to load stored model
+        #checkpoint = torch.load(model_save_path)
+        # policy_net.load_state_dict(checkpoint['policy_net_state_dict'])
+        # target_net.load_state_dict(checkpoint['target_net_state_dict'])
+        # optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+
 
 print('Complete')
 plot_durations(show_result=True)
 plt.ioff()
 plt.show()
+
+# Plot final metrics
+plt.figure(figsize=(12, 4))
+
+# Plot episode durations
+plt.subplot(1, 2, 1)
+plt.plot(episode_durations)
+plt.title('Episode Durations')
+plt.xlabel('Episode')
+plt.ylabel('Duration')
+
+# Plot episode rewards
+plt.subplot(1, 2, 2)
+plt.plot(episode_rewards)
+plt.title('Episode Rewards')
+plt.xlabel('Episode')
+plt.ylabel('Total Reward')
+
+plt.tight_layout()
+plt.show()
+
+# Save final metrics
+final_metrics_path = f"final_metrics.pkl"
+with open(final_metrics_path, 'wb') as f:
+    pickle.dump({
+        'episode_durations': episode_durations,
+        'episode_rewards': episode_rewards
+    }, f)
     
 
 
