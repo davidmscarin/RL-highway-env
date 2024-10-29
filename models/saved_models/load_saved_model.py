@@ -4,6 +4,8 @@ import highway_env
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import pprint
+import matplotlib.pyplot as plt
 
 # Define DQN class again since we need it to load the model
 class DQN(nn.Module):
@@ -33,12 +35,16 @@ n_actions = 3
 policy_net = DQN(n_observations, n_actions).to(device)
 
 # Load the saved model - update path to your specific saved model
-model_path = "saved_models/model_episode_10000.pt"  # Adjust episode number as needed
+model_path = "model_episode_9000.pt"  # Adjust episode number as needed
 checkpoint = torch.load(model_path)
 policy_net.load_state_dict(checkpoint['policy_net_state_dict'])
 policy_net.eval()  # Set to evaluation mode
 
 print(f"Loaded model from episode {checkpoint['episode']}")
+
+#print config of env
+print("configuration dict of environment:")
+pprint.pprint(env.unwrapped.config)
 
 def get_observation(obs):
     obs_list = []
@@ -48,12 +54,12 @@ def get_observation(obs):
     return torch.tensor([obs_list], dtype=torch.float32)
 
 # Run episodes with loaded model
-num_test_episodes = 10
+num_test_episodes = 100
+completed = []
 
 for episode in range(num_test_episodes):
     state, info = env.reset()
     state = get_observation(state)
-    episode_reward = 0
     done = False
     
     while not done:
@@ -63,14 +69,31 @@ for episode in range(num_test_episodes):
         
         # Take step in environment
         observation, reward, terminated, truncated, _ = env.step(action.item())
-        episode_reward += reward
         done = terminated or truncated
-        
+        if reward == -5 and done:
+            completed.append(0)
+            print('collision')
+        elif done:
+            completed.append(1)
+            print('complete')
+        print(completed)
+
         if not done:
             state = get_observation(observation)
             
         env.render()
     
-    print(f"Episode {episode + 1} finished with reward: {episode_reward}")
+    print(f"Episode {episode + 1} finished")
 
+# Plot completion statistics
+plt.figure(figsize=(8, 6))
+successes = completed.count(1)
+failures = completed.count(0)
+
+plt.bar(['Successes', 'Failures'], [successes, failures], 
+        color=['green', 'red'])
+plt.title('Episode Completion Statistics')
+plt.ylabel('Number of Episodes')
+plt.show()
+print(len(completed))
 env.close()
