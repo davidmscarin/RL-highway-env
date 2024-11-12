@@ -55,12 +55,8 @@ while True:
         action = [acceleration, steering]
         
     obs, reward, done, truncated, info = env.step(actions)
-    for action_idx in actions:
-        print(action_space[action_idx])
-    pprint.pprint(len(actions))
-    pprint.pprint(len(obs))
-    pprint.pprint(len(info))
-    pprint.pprint(done)
+    obs = np.array(obs)
+    print(obs.shape)
     if done:
         env.reset()
     env.render()

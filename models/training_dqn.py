@@ -81,7 +81,7 @@ class DQN(nn.Module):
     
 
 #hyperparameters and utilities
-BATCH_SIZE = 128
+BATCH_SIZE = 5
 GAMMA = 0.99
 EPS_START = 0.9
 EPS_END = 0.05
@@ -170,6 +170,7 @@ def optimize_model():
     # detailed explanation). This converts batch-array of Transitions
     # to Transition of batch-arrays.
     batch = Transition(*zip(*transitions))
+    print("batch", batch)
 
     # Compute a mask of non-final states and concatenate the batch elements
     # (a final state would've been the one after which simulation ended)
@@ -184,9 +185,9 @@ def optimize_model():
     # Compute Q(s_t, a) - the model computes Q(s_t), then we select the
     # columns of actions taken. These are the actions which would've been taken
     # for each batch state according to policy_net
-    
-    
+
     state_action_values = policy_net(state_batch).gather(1, action_batch)
+
 
     # Compute V(s_{t+1}) for all next states.
     # Expected values of actions for non_final_next_states are computed based
@@ -194,18 +195,25 @@ def optimize_model():
     # This is merged based on the mask, such that we'll have either the expected
     # state value or 0 in case the state was final.
     next_state_values = torch.zeros(BATCH_SIZE, device=device)
+    print("policy net", policy_net(state_batch))
     with torch.no_grad():
         next_state_values[non_final_mask] = target_net(non_final_next_states).max(1).values
+        print("target net", target_net(non_final_next_states))
     # Compute the expected Q values
     expected_state_action_values = (next_state_values * GAMMA) + reward_batch
 
     # Compute Huber loss
     criterion = nn.SmoothL1Loss()
     loss = criterion(state_action_values, expected_state_action_values.unsqueeze(1))
-
+    print("non final mask", non_final_mask)
+    print("state action values", state_action_values)
+    print("next state values", next_state_values)
+    print("expected action values", expected_state_action_values.unsqueeze(1))
+    print("rewards", reward_batch)
+    print(loss)
     # Optimize the model
     optimizer.zero_grad()
-    loss.backward()
+    print(loss.backward())
     # In-place gradient clipping
     torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
     optimizer.step()
