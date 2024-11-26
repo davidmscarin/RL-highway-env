@@ -9,11 +9,28 @@ import pickle
 import warnings
 from datetime import date
 from torch.utils.tensorboard import SummaryWriter
-#%matplotlib inline
+import argparse
+import os
+from glob import glob
+
+
+# Add argument parsing at the start of the script
+parser = argparse.ArgumentParser(description='Train or load a DQN model')
+parser.add_argument('--load_model', type=bool, default=False,
+                    help='Whether to load an existing model (default: False)')
+parser.add_argument('--model_path', type=str, default=None,
+                    help='Path to the model checkpoint to load')
+parser.add_argument('--only_agents', type=bool, default=False,
+                    help='Train with only the autonomous agents and no other cars')
+parser.add_argument('--render', type=bool, default=False,
+                    help='Whether or not to visually display training')
+args = parser.parse_args()
 
 env_version = 'v1' #'v0' or 'v1'
-render = False
-env = gymnasium.make('intersection-'+env_version, render_mode=None)
+render_mode=None
+if args.render:
+    render_mode='human'
+env = gymnasium.make('intersection-'+env_version, render_mode=render_mode)
 
 #config
 n_agents = 4
@@ -24,23 +41,44 @@ writer = SummaryWriter()
 # Set action type based on discrete flag
 action_type = "DiscreteMetaAction" if discrete else "ContinuousAction"
 
-# Multi-agent environment configuration
-env.unwrapped.config.update({
-  "controlled_vehicles": n_agents,
-  "observation": {
-    "type": "MultiAgentObservation",
-    "observation_config": {
-      "type": "Kinematics",
+if args.only_agents:
+    # Multi-agent environment configuration
+    env.unwrapped.config.update({
+    "controlled_vehicles": n_agents,
+    "initial_vehicle_count": 0,
+    "observation": {
+        "vehicles_count": n_agents,  
+        "type": "MultiAgentObservation",
+        "observation_config": {
+        "type": "Kinematics",
+        }
+    },
+    "action": {
+        "type": "MultiAgentAction",
+        "action_config": {
+        "type": action_type,
+        }
     }
-  },
-  "action": {
-    "type": "MultiAgentAction",
-    "action_config": {
-      "type": action_type,
+    })
+    env.reset()
+
+elif not args.only_agents:
+    env.unwrapped.config.update({
+    "controlled_vehicles": n_agents,
+    "observation": {
+        "type": "MultiAgentObservation",
+        "observation_config": {
+        "type": "Kinematics",
+        }
+    },
+    "action": {
+        "type": "MultiAgentAction",
+        "action_config": {
+        "type": action_type,
+        }
     }
-  }
-})
-env.reset()
+    })
+    env.reset()
 
 #print config of env
 print("configuration dict of environment:")
@@ -65,7 +103,7 @@ if is_ipython:
 
 # if GPU is to be used
 device = torch.device(
-    # "cuda" if torch.cuda.is_available() else
+    "cuda" if torch.cuda.is_available() else
     "mps" if torch.backends.mps.is_available() else
     "cpu"
 )
@@ -118,7 +156,7 @@ class DQN(nn.Module):
     
 
 #hyperparameters and utilities
-BATCH_SIZE = 256
+BATCH_SIZE = 512
 GAMMA = 0.99
 EPS_START = 0.9
 EPS_END = 0.05
@@ -139,6 +177,21 @@ target_net.load_state_dict(policy_net.state_dict())
 optimizer = optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
 memory = ReplayMemory(10000)
 
+if args.load_model:
+    if args.model_path is None:
+        raise ValueError("Model path must be specified when load_model is True")
+    
+    checkpoint = torch.load(args.model_path)
+    policy_net.load_state_dict(checkpoint['policy_net_state_dict'])
+    target_net.load_state_dict(checkpoint['target_net_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    episode_rewards = checkpoint['episode_rewards']
+    episode_durations = checkpoint['episode_durations']
+    starting_episode = checkpoint['episode'] + 1
+    print(f"Loaded model from {args.model_path}, continuing from episode {starting_episode}")
+else:
+    target_net.load_state_dict(policy_net.state_dict())
+    starting_episode = 0
 
 steps_done = 0
 
@@ -155,12 +208,10 @@ def select_action(state):
             # second column on max result is index of where max element was
             # found, so we pick action with the larger expected reward.
             state = state.to(device)
-            with torch.no_grad():
-                expected_reward = policy_net(state)
-            
+            expected_reward = policy_net(state)
             #torch.tensor([tuple(torch.argmax(policy_net(state)) for _ in range(n_agents))], device=device, dtype=torch.long)
             print("policy net action")
-            return torch.tensor([[[torch.argmax(head).item() for head in expected_reward[0]]]], device=device, dtype=torch.long), tuple(torch.argmax(head).item() for head in expected_reward[0])
+            return torch.tensor([[[torch.max(head) for head in expected_reward[0]]]], device=device, dtype=torch.float32), tuple(torch.max(head) for head in expected_reward[0])
     else:
         #return torch.tensor(tuple(env.action_space.sample()), device=device, dtype=torch.long)
         print("random action")
@@ -232,18 +283,14 @@ def plot_durations(show_result=False):
         else:
             display.display(plt.gcf())
 
-def get_action_value(network_output):
-        return torch.tensor([[torch.max(head).item() for head in network_output[0]]], device=device, dtype=torch.float32)
-
 # #optimizing network
 def optimize_model():
     if len(memory) < BATCH_SIZE:
         return
+    
+    print("Optimizing...")
+
     transitions = memory.sample(BATCH_SIZE)
-    print("Batch Completed. Optimizing... ")
-    # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
-    # detailed explanation). This converts batch-array of Transitions
-    # to Transition of batch-arrays.
     batch = Transition(*zip(*transitions))
 
     # Compute a mask of non-final states and concatenate the batch elements
@@ -256,155 +303,82 @@ def optimize_model():
     action_batch = torch.cat(batch.action)
     reward_batch = torch.cat(batch.reward)
 
-    # Compute Q(s_t, a) - the model computes Q(s_t), then we select the
-    # columns of actions taken. These are the actions which would've been taken
-    # for each batch state according to policy_net
-    # for state in state_batch:
-    #     network_output = policy_net(state)
-    #     action = get_action_value(network_output=network_output)
-    #     print(action)
-    state_action_values = torch.tensor((), device=device, dtype = torch.float32)
+    # Replace the manual tensor construction with direct network output
+    state_action_values = torch.zeros((BATCH_SIZE, n_agents), device=device)
     for state in state_batch:
-        network_output = target_net(state)
-        state_action_values = torch.cat((state_action_values, get_action_value(network_output)), 0)
+        temp_val = policy_net(state)  # Get all actions directly
+        agent_vals = torch.tensor([], device=device, requires_grad=True)
+        for head in temp_val[0]:
+            max = torch.empty(1, device=device)
+            max[0] = torch.max(head)
+            agent_vals = torch.cat((agent_vals, max))
+        state_action_values = torch.cat((state_action_values, agent_vals.unsqueeze(0)), dim=0)
 
-    # Compute V(s_{t+1}) for all next states.
-    # Expected values of actions for non_final_next_states are computed based
-    # on the "older" target_net; selecting their best reward with max(1).values
-    # This is merged based on the mask, such that we'll have either the expected
-    # state value or 0 in case the state was final.
+    state_action_values = state_action_values[BATCH_SIZE:]
 
-
-    # Compute the expected Q values
-    next_state_values = torch.tensor((), device=device, dtype = torch.float32)
-    non_final_idx = 0
-    with torch.no_grad():
-        for mask in non_final_mask:
-            if mask == True:
-                network_output = target_net(non_final_next_states[non_final_idx])
-                next_state_values = torch.cat((next_state_values, get_action_value(network_output)), 0)
+    # Compute next state values more efficiently
+    next_state_values = torch.zeros((BATCH_SIZE, n_agents), device=device)
+    non_final_iter = 0
+    if non_final_mask.any():
+        for i_state in range(len(state_batch)):
+            if non_final_mask[i_state] == True:
+                temp_val = target_net(non_final_next_states[non_final_iter])  # Get all actions directly
+                non_final_iter+=1
+                agent_vals = torch.tensor([], device=device, requires_grad=True)
+                for head in temp_val[0]:
+                    max = torch.empty(1, device=device)
+                    max[0] = torch.max(head)
+                    agent_vals = torch.cat((agent_vals, max))
+                next_state_values = torch.cat((next_state_values, agent_vals.unsqueeze(0)), dim=0)
             else:
-                next_state_values = torch.cat((next_state_values, torch.tensor([[-1, -1, -1, -1]], device=device, dtype=torch.float32)), 0)
+                zeros_tensor = torch.zeros((4), device=device)
+                next_state_values = torch.cat((next_state_values, zeros_tensor.unsqueeze(0)), dim=0) #add zeros if no next state
 
-    # for mask in non_final_mask:
-    #     if mask == True:
-    #         state = non_final_next_states[non_final_idx]
-    #         non_final_idx+=1
-    #         with torch.no_grad():
-    #             print(state)
-    #             network_output = target_net(state)
-    #         action = get_action_value(network_output=network_output)
-    #         action_list = torch.cat((action_list, action), 1)
-    #     else:
-    #         action_list = torch.cat((action_list, torch.tensor([[-1, -1, -1, -1]], device = device, dtype = torch.float32)), 1)
-    # next_state_values = torch.stack(action_list, dim=0)
+    next_state_values = next_state_values[BATCH_SIZE:]
 
-    expected_state_action_values = torch.tensor((), device=device, dtype = torch.float32)
-    reward_batch = reward_batch[:, None]
-    reward_batch = torch.repeat_interleave(reward_batch, 4, 1)
-    expected_state_action_values = (next_state_values * GAMMA) + reward_batch
+    # Calculate expected values directly
+    expected_state_action_values = next_state_values * GAMMA
 
-    state_action_values = state_action_values.requires_grad_()
-    expected_state_action_values = expected_state_action_values.requires_grad_()
-
-    # Compute Huber loss
+    for b in range(BATCH_SIZE):
+        r = reward_batch[b] 
+        for elem in range(len(expected_state_action_values[b])):
+            expected_state_action_values[b][elem]+=r
+    
+    
+    # Compute loss
     criterion = nn.SmoothL1Loss()
     loss = criterion(state_action_values, expected_state_action_values)
-    print("loss ", loss)
 
     # Optimize the model
     optimizer.zero_grad()
     loss.backward()
-    # In-place gradient clipping
-    #torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
+    torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
+    # for name, param in policy_net.named_parameters():
+    #         print(name , param.grad)
     optimizer.step()
+    print("optimizer step")
     return loss
-
-
-
-# def optimize_model():
-#     if len(memory) < BATCH_SIZE:
-#         return
-#     transitions = memory.sample(BATCH_SIZE)
-    
-#     # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for
-#     # detailed explanation). This converts batch-array of Transitions
-#     # to Transition of batch-arrays.
-#     batch = Transition(*zip(*transitions))
-#     # Compute a mask of non-final states and concatenate the batch elements
-#     # (a final state would've been the one after which simulation ended)
-#     non_final_mask = torch.tensor(tuple(map(lambda s: s is not None,
-#                                           batch.next_state)), device=device, dtype=torch.bool)
-#     non_final_mask = non_final_mask.to(device)
-
-#     non_final_next_states = torch.cat([s for s in batch.next_state
-#                                                 if s is not None])
-#     non_final_next_states = non_final_next_states.to(device)
-
-#     state_batch = torch.cat(batch.state)
-#     state_batch = state_batch.to(device)
-
-#     action_batch = torch.cat(batch.action)
-#     action_batch = action_batch.to(device)
-
-#     reward_batch = torch.cat(batch.reward)
-#     reward_batch = reward_batch.to(device)
-
-#     # Compute Q(s_t, a) - the model computes Q(s_t), then we select the
-#     # columns of actions taken. These are the actions which would've been taken
-#     # for each batch state according to policy_net
-    
-#     print(state_batch.shape)
-#     print(action_batch.shape)
-#     state_action_values = policy_net(state_batch).gather(1, action_batch)
-#     print(state_action_values.shape)
-
-#     # Compute V(s_{t+1}) for all next states.
-#     # Expected values of actions for non_final_next_states are computed based
-#     # on the "older" target_net; selecting their best reward with max(1).values
-#     # This is merged based on the mask, such that we'll have either the expected
-#     # state value or 0 in case the state was final.
-#     next_state_values = torch.zeros(BATCH_SIZE, device=device)
-#     print(non_final_mask)
-#     print(non_final_next_states.shape)
-#     with torch.no_grad():
-#         next_state_values[non_final_mask] = target_net(non_final_next_states[:, 0]).max(1).values
-#     # Compute the expected Q values
-#     expected_state_action_values = (next_state_values * GAMMA) + reward_batch
-
-#     # Compute Huber loss
-#     criterion = nn.SmoothL1Loss()
-#     print(state_action_values.shape)
-#     print(expected_state_action_values.shape)
-#     loss = criterion(state_action_values, expected_state_action_values.unsqueeze(1))
-
-#     # Optimize the model
-#     optimizer.zero_grad()
-#     loss.backward()
-#     # In-place gradient clipping
-#     torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
-#     optimizer.step()
 
 
 
 num_episodes = 100000
 
-for i_episode in range(num_episodes):
+for i_episode in range(starting_episode, num_episodes):
     # Initialize the environment and get its state
     state, info = env.reset()
     state = get_observation(state)
-    print(f"started episode {i_episode}: ")
+    print(f"running episode {i_episode}: ")
 
     episode_reward = 0
 
     for t in count():
-        print(f"running step {t}")
+        #print(f"running step {t}")
         action, action_tuple = select_action(state)
-        print("selected action ", action_tuple)
+        #print("selected action ", action_tuple)
         observation, reward, terminated, truncated, info = env.step(action_tuple)
-        print("got reward ", reward)
+        #print("got reward ", reward)
         episode_reward+=reward
-        reward = torch.tensor([reward], dtype=torch.float32, device=device)
+        reward_t = torch.tensor([reward], dtype=torch.float32, device=device)
         done = terminated or truncated
         if render_env is True:
             env.render()
@@ -415,7 +389,7 @@ for i_episode in range(num_episodes):
             next_state = get_observation(observation) 
 
         # Store the transition in memory
-        memory.push(state, action, next_state, reward)
+        memory.push(state, action, next_state, reward_t)
 
         # Move to the next state
         state = next_state
@@ -431,23 +405,39 @@ for i_episode in range(num_episodes):
             target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
         target_net.load_state_dict(target_net_state_dict)
 
+        # Log metrics to tensorboard
+        writer.add_scalar('Training/Episode Duration', t + 1, i_episode)
+        writer.add_scalar('Training/Episode Reward', reward, i_episode)
+        if loss is not None:
+            writer.add_scalar('Training/Loss', loss.item(), i_episode)
+
         if done:
             episode_durations.append(t + 1)
             episode_rewards.append(episode_reward)
-            plot_durations()
-            plot_rewards()
+            # plot_durations()
+            # plot_rewards()
+            print(f"episode finished with {t+1} steps")
             break
         
-        # Log metrics to tensorboard
-        writer.add_scalar('Training/Episode Duration', t + 1, i_episode)
-        writer.add_scalar('Training/Episode Reward', episode_reward, i_episode)
-        if loss is not None:
-            writer.add_scalar('Training/Loss', loss.item(), i_episode)
 
         # Save models and data every 1000 episodes
         if (i_episode + 1) % 1000 == 0:
             # Save model parameters using PyTorch
-            model_save_path = f"saved_models/model"+date+"_episode_{i_episode+1}.pt"
+            model_save_path = f"saved_models/model_"+date.today().strftime('%Y-%m-%d')+"_episode_{i_episode+1}.pt"
+            torch.save({
+                'episode': i_episode,
+                'policy_net_state_dict': policy_net.state_dict(),
+                'target_net_state_dict': target_net.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'episode_rewards': episode_rewards,
+                'episode_durations': episode_durations
+            }, model_save_path)
+            
+            print(f"Saved checkpoint at episode {i_episode+1}")
+        
+        if (i_episode)==0:
+            # Save model parameters using PyTorch
+            model_save_path = f"saved_models/sanity_check_model" + date.today().strftime('%Y-%m-%d') + ".pt"
             torch.save({
                 'episode': i_episode,
                 'policy_net_state_dict': policy_net.state_dict(),
@@ -459,12 +449,6 @@ for i_episode in range(num_episodes):
             
             print(f"Saved checkpoint at episode {i_episode+1}")
 
-        #code to load stored model
-        #checkpoint = torch.load(model_save_path)
-        # policy_net.load_state_dict(checkpoint['policy_net_state_dict'])
-        # target_net.load_state_dict(checkpoint['target_net_state_dict'])
-        # optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-
 
 print('Complete')
 plot_durations(show_result=True)
@@ -473,23 +457,6 @@ plt.show()
 
 # Plot final metrics
 plt.figure(figsize=(12, 4))
-
-# Plot episode durations
-plt.subplot(1, 2, 1)
-plt.plot(episode_durations)
-plt.title('Episode Durations')
-plt.xlabel('Episode')
-plt.ylabel('Duration')
-
-# Plot episode rewards
-plt.subplot(1, 2, 2)
-plt.plot(episode_rewards)
-plt.title('Episode Rewards')
-plt.xlabel('Episode')
-plt.ylabel('Total Reward')
-
-plt.tight_layout()
-plt.show()
 
 # Save final metrics
 final_metrics_path = f"final_metrics.pkl"

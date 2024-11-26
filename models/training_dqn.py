@@ -218,6 +218,9 @@ def optimize_model():
     torch.nn.utils.clip_grad_value_(policy_net.parameters(), 100)
     optimizer.step()
 
+    for name, param in policy_net.named_parameters():
+            print(name , param.grad)
+
 
 
 num_episodes = 10000
