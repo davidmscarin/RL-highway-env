@@ -42,6 +42,8 @@ writer = SummaryWriter()
 action_type = "DiscreteMetaAction" if discrete else "ContinuousAction"
 
 if args.only_agents:
+
+    model_name = "only_agents"
     # Multi-agent environment configuration
     env.unwrapped.config.update({
     "controlled_vehicles": n_agents,
@@ -57,12 +59,17 @@ if args.only_agents:
         "type": "MultiAgentAction",
         "action_config": {
         "type": action_type,
+        "lateral": False,
+        "longitudinal": True
         }
     }
     })
     env.reset()
 
 elif not args.only_agents:
+
+    model_name = "default_agents"
+
     env.unwrapped.config.update({
     "controlled_vehicles": n_agents,
     "observation": {
@@ -75,6 +82,8 @@ elif not args.only_agents:
         "type": "MultiAgentAction",
         "action_config": {
         "type": action_type,
+        "lateral": False,
+        "longitudinal": True
         }
     }
     })
@@ -162,7 +171,7 @@ EPS_START = 0.9
 EPS_END = 0.05
 EPS_DECAY = 1000
 TAU = 0.005
-LR = 1e-3
+LR = 1e-4
 
 #Get number of actions from gym action space
 n_actions = 3
@@ -421,9 +430,9 @@ for i_episode in range(starting_episode, num_episodes):
         
 
         # Save models and data every 1000 episodes
-        if (i_episode + 1) % 1000 == 0:
+        if (i_episode + 1) % 500 == 0:
             # Save model parameters using PyTorch
-            model_save_path = f"saved_models/model_"+date.today().strftime('%Y-%m-%d')+"_episode_{i_episode+1}.pt"
+            model_save_path = f"saved_models/"+"model_"+model_name+date.today().strftime('%Y-%m-%d')+"_episode_"+str(i_episode)+".pt"
             torch.save({
                 'episode': i_episode,
                 'policy_net_state_dict': policy_net.state_dict(),
