@@ -30,7 +30,10 @@ env_version = 'v1' #'v0' or 'v1'
 render_mode=None
 if args.render:
     render_mode='human'
-env = gymnasium.make('intersection-'+env_version, render_mode=render_mode)
+
+env = gymnasium.make('intersection-v1', render_mode=render_mode)
+
+# env = gymnasium.make('intersection-' + env_version, render_mode=render_mode)
 
 #config
 n_agents = 4
