@@ -1,5 +1,8 @@
 #itializing environment
 
+# -- REMINDER -- 
+# Check Replay Memory, maybe delete after optimization step and get new batch?
+
 import gymnasium
 import pprint
 import highway_env
@@ -168,13 +171,13 @@ class DQN(nn.Module):
     
 
 #hyperparameters and utilities
-BATCH_SIZE = 512
+BATCH_SIZE = 256
 GAMMA = 0.99
 EPS_START = 0.9
 EPS_END = 0.05
 EPS_DECAY = 1000
 TAU = 0.005
-LR = 1e-4
+LR = 1e-5
 
 #Get number of actions from gym action space
 n_actions = 3
@@ -186,7 +189,7 @@ policy_net = DQN(n_observations, n_actions).to(device)
 target_net = DQN(n_observations, n_actions).to(device)
 target_net.load_state_dict(policy_net.state_dict())
 
-optimizer = optim.AdamW(policy_net.parameters(), lr=LR, amsgrad=True)
+optimizer = optim.SGD(policy_net.parameters(), lr=LR)#, amsgrad=True)
 memory = ReplayMemory(10000)
 
 if args.load_model:

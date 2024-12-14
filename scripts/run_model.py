@@ -112,7 +112,7 @@ def load_dqn_model(model_path=None, policy_net=None, target_net=None, optimizer=
         raise FileNotFoundError(f"Model file not found: {model_path}")
     
     # Load the checkpoint
-    checkpoint = torch.load(model_path)
+    checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
     
     # Load model states if networks are provided
     if policy_net is not None:
@@ -152,7 +152,7 @@ target_net = DQN(n_observations, n_actions)
 target_net.load_state_dict(policy_net.state_dict())
 optimizer = optim.AdamW(policy_net.parameters(), lr=1e-3, amsgrad=True)
 
-model_path = '/Users/davidscarin/Documents/Uni/MIA/MS/RL-highway-env/models/saved_models/model_2024-11-20_episode_{i_episode+1}.pt'
+model_path = '/Users/davidscarin/Documents/Uni/MIA/MS/RL-highway-env/models/saved_models/model_default_agents2024-12-10_episode_999.pt'
 
 # Load most recent model
 checkpoint = load_dqn_model(model_path=model_path, policy_net=policy_net, target_net=target_net, optimizer=optimizer)
