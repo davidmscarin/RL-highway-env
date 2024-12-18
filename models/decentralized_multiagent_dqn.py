@@ -1,5 +1,3 @@
-#itializing environment
-
 # -- REMINDER -- 
 # Check Replay Memory, maybe delete after optimization step and get new batch?
 
@@ -16,8 +14,30 @@ import argparse
 import os
 from glob import glob
 from metrics.rewards import compute_influence_reward
+from zeus.monitor import ZeusMonitor
 
+# Add argument parsing at the start of the script
+parser = argparse.ArgumentParser(description='Train or load a DQN model')
+parser.add_argument('--load_model', type=bool, default=False,
+                    help='Whether to load an existing model (default: False)')
+parser.add_argument('--only_agents', type=bool, default=False,
+                    help='Train with only the autonomous agents and no other cars')
+parser.add_argument('--render', type=bool, default=False,
+                    help='Whether or not to visually display training')
+parser.add_argument('--lr', type=bool, default=1e-5,
+                    help='Set learning rate for the optimizer')
+parser.add_argument('--batch_size', type=bool, default=256,
+                    help='Set batch size for optimization')
+parser.add_argument('--max_eps', type=bool, default=100000,
+                    help='Set maximum number of episodes')
+args = parser.parse_args()
 
+env_version = 'v1'
+render_mode=None
+if args.render:
+    render_mode='human'
+
+#initialize and configure environment
 env = gymnasium.make('intersection-v1', render_mode=None)
 
 #config
@@ -29,29 +49,56 @@ writer = SummaryWriter()
 # Set action type based on discrete flag
 action_type = "DiscreteMetaAction" if discrete else "ContinuousAction"
 
+only_agents = False
 
-model_name = "only_agents"
-# Multi-agent environment configuration
-env.unwrapped.config.update({
-"controlled_vehicles": n_agents,
-"initial_vehicle_count": 0,
-"observation": {
-    "vehicles_count": n_agents,  
-    "type": "MultiAgentObservation",
-    "observation_config": {
-    "type": "Kinematics",
+#environment configuration
+if only_agents:
+
+    model_name = "only_agents"
+    # Multi-agent environment configuration
+    env.unwrapped.config.update({
+    "controlled_vehicles": n_agents,
+    "initial_vehicle_count": 0,
+    "observation": {
+        "vehicles_count": n_agents,  
+        "type": "MultiAgentObservation",
+        "observation_config": {
+        "type": "Kinematics",
+        }
+    },
+    "action": {
+        "type": "MultiAgentAction",
+        "action_config": {
+        "type": action_type,
+        "lateral": False,
+        "longitudinal": True
+        }
     }
-},
-"action": {
-    "type": "MultiAgentAction",
-    "action_config": {
-    "type": action_type,
-    "lateral": False,
-    "longitudinal": True
+    })
+    env.reset()
+
+elif not only_agents:
+
+    model_name = "default_agents"
+
+    env.unwrapped.config.update({
+    "controlled_vehicles": n_agents,
+    "observation": {
+        "type": "MultiAgentObservation",
+        "observation_config": {
+        "type": "Kinematics",
+        }
+    },
+    "action": {
+        "type": "MultiAgentAction",
+        "action_config": {
+        "type": action_type,
+        "lateral": False,
+        "longitudinal": True
+        }
     }
-}
-})
-env.reset()
+    })
+    env.reset()
 
 
 #print config of env
@@ -71,7 +118,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-# if GPU is to be used
+#choose which device to use
 device = torch.device(
     "cuda" if torch.cuda.is_available() else
     "mps" if torch.backends.mps.is_available() else
@@ -105,8 +152,7 @@ class PolicyNetwork(nn.Module):
         self.layer2 = nn.Linear(128, 128)
         self.layer3 = nn.Linear(128, n_actions)
 
-    # Called with either one element to determine next action, or a batch
-    # during optimization. Returns tensor([[left0exp,right0exp]...]).
+    #return action tensor
     def forward(self, x):
         x = F.relu(self.layer1(x))
         x = F.relu(self.layer2(x))
@@ -114,44 +160,58 @@ class PolicyNetwork(nn.Module):
     
 
 #hyperparameters and utilities
-BATCH_SIZE = 128
+BATCH_SIZE = args.batch_size
 GAMMA = 0.99
 EPS_START = 0.9
 EPS_END = 0.05
 EPS_DECAY = 1000
 TAU = 0.005
-LR = 1e-5
+LR = args.lr
 
-#Get number of actions from gym action space
+#initialize dimension variables
 n_actions = 3
-# Get the number of state observations
 n_observations = 25
-render_env = False
-agents = {i: PolicyNetwork(n_observations, n_actions) for i in range(n_agents)}
-optimizers = {i: optim.Adam(agents[i].parameters(), lr=1e-3) for i in range(n_agents)}
+
+#render_env = False
+
+#initialize representations of agents
+#each agent has a respective policy network, target network (used for soft updates to parameters) and optimizer
+agents = {i: PolicyNetwork(n_observations, n_actions).to(device) for i in range(n_agents)}
+agents_target = {i: PolicyNetwork(n_observations, n_actions).to(device) for i in range(n_agents)}
+for i_agent in range(n_agents): agents_target[i_agent].load_state_dict(agents[i_agent].state_dict())
+optimizers = {i: optim.Adam(agents[i].parameters(), lr=LR) for i in range(n_agents)}
 agent_memories = {i : ReplayMemory(10000) for i in range(n_agents)}
 losses = {i: None for i in range(n_agents)}
+rewards = {i: None for i in range(n_agents)}
 
 
-# in case you want to add arguments:
-# if args.load_model:
-#     if args.model_path is None:
-#         raise ValueError("Model path must be specified when load_model is True")
-    
-#     checkpoint = torch.load(args.model_path)
-#     policy_net.load_state_dict(checkpoint['policy_net_state_dict'])
-#     target_net.load_state_dict(checkpoint['target_net_state_dict'])
-#     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-#     episode_rewards = checkpoint['episode_rewards']
-#     episode_durations = checkpoint['episode_durations']
-#     starting_episode = checkpoint['episode'] + 1
-#     print(f"Loaded model from {args.model_path}, continuing from episode {starting_episode}")
-# else:
-#     target_net.load_state_dict(policy_net.state_dict())
-#     starting_episode = 0
+
+
+if args.load_model:
+    for i_agent in range(n_agents):
+
+        # Load the checkpoint
+        checkpoint_path = f"saved_models/model_default_agents_agent_{i_agent}_2024-12-15_episode_19999_LR_1e-05.pt"
+        if not os.path.exists(checkpoint_path):
+            raise FileNotFoundError(f"No checkpoint found at {checkpoint_path}")
+        
+        checkpoint = torch.load(checkpoint_path)
+        
+        # Load the state dictionaries
+        agents[i_agent].load_state_dict(checkpoint['agent_policy_net_state_dict'])
+        optimizers[i_agent].load_state_dict(checkpoint['optimizer_state_dict'])
+        
+        # Copy parameters to target network
+        agents_target[i_agent].load_state_dict(agents[i_agent].state_dict())
+        
+        # Set starting episode if needed
+        if i_agent == 0:  # only need to do this once
+            starting_episode = checkpoint['episode'] + 1
+            episode_rewards = checkpoint['episode_rewards']
+            episode_durations = checkpoint['episode_durations']
+
 
 steps_done = 0
-
 
 def select_action(state, policy_net):
     policy_net.to(device)
@@ -161,22 +221,21 @@ def select_action(state, policy_net):
         math.exp(-1. * steps_done / EPS_DECAY)
     steps_done += 1
     if sample < eps_threshold:
+        #return action from policy net
         with torch.no_grad():
-            # t.max(1) will return the largest column value of each row.
-            # second column on max result is index of where max element was
-            # found, so we pick action with the larger expected reward.
             state = state.flatten()
             state = torch.tensor(state, device=device)
             return True, torch.argmax(policy_net(state)).item()
     else:
+        #sample random action from environment
         return False, env.action_space.sample()
 
 episode_durations = []
 episode_rewards = []
 
-
-def optimize_model(policy_net, optimizer, memory):
-    target_net = policy_net
+#perform optimization
+def optimize_model(policy_net, target_net, optimizer, memory):
+    #only optimize if replay memory is big enough
     if len(memory) < BATCH_SIZE:
         print("not enough transitions")
         return
@@ -228,9 +287,14 @@ def optimize_model(policy_net, optimizer, memory):
 
 
 starting_episode = 0
-num_episodes = 100000
+num_episodes = args.max_eps
+
+monitor = ZeusMonitor(gpu_indices=[torch.cuda.current_device()] if device.type == 'cuda' else None, approx_instant_energy = True)
+cumulative_episode_consumption = 0
 
 for i_episode in range(starting_episode, num_episodes):
+    # begin ZeusMonitor window for episode
+    monitor.begin_window("episode")
     # Initialize the environment and get its state
     states, info = env.reset()
     print(f"running episode {i_episode}: ")
@@ -251,53 +315,84 @@ for i_episode in range(starting_episode, num_episodes):
         
         print(actions_tuple)
 
+        # begin ZeusMonitor window for step
+        step_z = monitor.begin_window("step")
         observation, reward, terminated, truncated, info = env.step(actions_tuple)
-        print("got reward ", reward)
+        print(info)
+        #print("got reward ", reward)
+        print("mean reward: ", reward)
         episode_reward+=reward
         reward_t = torch.tensor([reward], dtype=torch.float32, device=device)
         done = terminated or truncated
 
-        if terminated:
-            next_states = None
-        else:
-            next_states = observation
+        #compute influence rewards
+        agent_influence_rewards = compute_influence_reward(agents=agents, state=states, actions=actions_tuple, device=device)
+        print("influence: ", agent_influence_rewards)
+
+        # end ZeusMonitor window for step
+        monitor.end_window("step")
+        
+        next_states = observation
         
         for i_agent in range(n_agents):
-            state = states[i_agent].flatten()
-            if next_states is not None:
+
+            #find which next states are terminal
+            if info['agents_terminated'][i_agent] is True:
                 next_state = torch.tensor([next_states[i_agent].flatten()], device=device)
-            else:
+            elif info['agents_terminated'][i_agent] is False:
                 next_state = None
-            agent_memories[i_agent].push(torch.tensor([state], device=device), torch.tensor([actions_tuple[i_agent]], device=device), next_state, torch.tensor([reward_t], device=device))        
+
+            #assign influenced reward for each agent
+            rewards[i_agent] = info['agents_rewards'][i_agent]+agent_influence_rewards[i_agent]
+
+            state = states[i_agent].flatten()
+
+            agent_memories[i_agent].push(torch.tensor([state], device=device), torch.tensor([actions_tuple[i_agent]], device=device), next_state, torch.tensor([rewards[i_agent]], device=device, dtype=torch.float32))        
 
         # Move to the next state
         states = next_states
 
-        # Perform one step of the optimization (on the policy network)
+        # Perform optimization for each agent model
         for i_agent in agents:
-            losses[i_agent] = optimize_model(agents[i_agent], optimizers[i_agent], agent_memories[i_agent])
+            losses[i_agent] = optimize_model(agents[i_agent], agents_target[i_agent], optimizers[i_agent], agent_memories[i_agent])
+            print(f"Loss agent {i_agent+1}: ", losses[i_agent])
+
+            # Soft update of the target network's weights
+            # θ′ ← τ θ + (1 −τ )θ′
+            target_net_state_dict = agents[i_agent].state_dict()
+            policy_net_state_dict = agents_target[i_agent].state_dict()
+            for key in policy_net_state_dict:
+                target_net_state_dict[key] = policy_net_state_dict[key]*TAU + target_net_state_dict[key]*(1-TAU)
+            agents_target[i_agent].load_state_dict(target_net_state_dict)
 
         if done:
             episode_durations.append(t + 1)
             episode_rewards.append(episode_reward)
-            # plot_durations()
-            # plot_rewards()
             print(f"episode finished with {t+1} steps")
             break
-    
+
+    # end ZeusMonitor window for episode
+    ep_z = monitor.end_window("episode")
+    cumulative_episode_consumption += ep_z.total_energy
+
     # Log metrics to tensorboard
     writer.add_scalar('Training/Episode Duration', t + 1, i_episode)
-    writer.add_scalar('Training/Episode Reward', episode_reward, i_episode)
+    writer.add_scalar('Training/Episode Mean Reward', episode_reward, i_episode)
+    writer.add_scalar('Zeus/Episode Energy (J) Consumption', ep_z.total_energy, i_episode)
+    writer.add_scalar('Zeus/Total Energy (J) Consumption', cumulative_episode_consumption, i_episode)
+
     for i_agent in range(n_agents):
         if losses[i_agent] is not None:
-            writer.add_scalar(f'Training/Loss Agent {i_agent}', losses[i_agent].item(), i_episode)
+            writer.add_scalar(f'Training/Loss Agent {i_agent+1}', losses[i_agent].item(), i_episode)
         
 
-        # Save models and data every 1000 episodes
-        if (i_episode + 1) % 500 == 0:
+        # Save models and data every 5000 episodes
+        if (i_episode + 1) % 5000 == 0:
             # Save model parameters using PyTorch
             for n_agent in range(n_agents):
-                model_save_path = "saved_models/"+"model_"+model_name+"agent "+str(n_agent)+" "+date.today().strftime('%Y-%m-%d')+"_episode_"+str(i_episode)+".pt"
+                model_save_path = "saved_models/"+"model_"+model_name+"_agent_"+str(n_agent)+"_"+date.today().strftime('%Y-%m-%d')+"_episode_"+str(i_episode)+"_LR_"+str(LR)+".pt"
+                if not os.path.exists("saved_models/"):
+                    os.makedirs("saved_models/")
                 torch.save({
                     'episode': i_episode,
                     'agent_policy_net_state_dict': agents[n_agent].state_dict(),
@@ -311,6 +406,8 @@ for i_episode in range(starting_episode, num_episodes):
         if (i_episode)==0:
             # Save model parameters using PyTorch
             model_save_path = f"saved_models/sanity_check_model" + date.today().strftime('%Y-%m-%d') + ".pt"
+            if not os.path.exists("saved_models/"):
+                os.makedirs("saved_models/")
             torch.save({
                 'episode': i_episode,
                 'policy_net_state_dict': agents[0].state_dict(), #first agent picked arbitrarily

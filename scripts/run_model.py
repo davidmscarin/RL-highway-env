@@ -8,7 +8,7 @@ import torch.nn.functional as F
 import numpy as np
 import random
 import time
-
+from itertools import count
 
 env_version = 'v1' #'v0' or 'v1'
 render = True
@@ -47,6 +47,7 @@ env.unwrapped.config.update({
 })
 env.reset()
 
+
 #print config of env
 print("configuration dict of environment:")
 pprint.pprint(env.unwrapped.config)
@@ -56,125 +57,134 @@ import os
 from glob import glob
 
 
-#Q-network
-class DQN(nn.Module):
-    def __init__(self, input_dim, output_dim, n_agents=4):
-        super(DQN, self).__init__()
-        self.n_agents = n_agents
-        
-        # Shared feature extraction layers
-        self.fc1 = nn.Linear(input_dim, 128)
-        self.fc2 = nn.Linear(128, 128)
-        
-        # Separate output heads for each agent
-        self.output_heads = nn.ModuleList([nn.Linear(128, output_dim) for _ in range(n_agents)])
-        
+#DQN policy net
+class PolicyNetwork(nn.Module):
+    def __init__(self, n_observations, n_actions):
+        super(PolicyNetwork, self).__init__()
+        self.layer1 = nn.Linear(n_observations, 128)
+        self.layer2 = nn.Linear(128, 128)
+        self.layer3 = nn.Linear(128, n_actions)
+
+    #return action tensor
     def forward(self, x):
-        # Shared feature extraction
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        
-        # Get actions for each agent through separate heads
-        agent_actions = []
-        for head in self.output_heads:
-            agent_action = F.softmax(head(x), dim=-1)
-            agent_actions.append(agent_action)
-            
-        # Stack all agent actions
-        return torch.stack(agent_actions, dim=1)  # Shape: [batch_size, n_agents, n_actions]
-
-def load_dqn_model(model_path=None, policy_net=None, target_net=None, optimizer=None):
-    """
-    Load a saved DQN model and its training state.
+        x = F.relu(self.layer1(x))
+        x = F.relu(self.layer2(x))
+        return self.layer3(x)
     
-    Args:
-        model_path (str): Path to specific model file. If None, loads most recent model.
-        policy_net: The policy network to load weights into
-        target_net: The target network to load weights into
-        optimizer: The optimizer to load state into
-    
-    Returns:
-        dict: Contains loaded model information including:
-            - policy_net_state_dict
-            - target_net_state_dict
-            - optimizer_state_dict
-            - episode_rewards
-            - episode_durations
-            - episode
-    """
-    
-    if model_path is None:
-        # Find most recent model file
-        print('no path given')
-        exit()
-    
-    if not os.path.exists(model_path):
-        raise FileNotFoundError(f"Model file not found: {model_path}")
-    
-    # Load the checkpoint
-    checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
-    
-    # Load model states if networks are provided
-    if policy_net is not None:
-        policy_net.load_state_dict(checkpoint['policy_net_state_dict'])
-    if target_net is not None:
-        target_net.load_state_dict(checkpoint['target_net_state_dict'])
-    if optimizer is not None:
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    
-    print(f"Loaded model from {model_path}")
-    print(f"Model was saved at episode {checkpoint['episode']}")
-    
-    return checkpoint
-
-def get_network_action(state):
-    expected_reward = policy_net(state)
-    return tuple(torch.max(head) for head in expected_reward[0])
-
-def get_state(obs):
-    obs_list = []
-    for agent in obs:
-        for row in agent:
-            for element in row:
-                obs_list.append(element)
-    torch_obs = torch.tensor([[obs_list]], device=device, dtype=torch.float32, requires_grad=True)
-    return torch_obs
-
-
-#Get number of actions from gym action space
 n_actions = 3
-# Get the number of state observations
-n_observations = 100
-render_env = False
+n_observations = 25
 
-policy_net = DQN(n_observations, n_actions)
-target_net = DQN(n_observations, n_actions)
-target_net.load_state_dict(policy_net.state_dict())
-optimizer = optim.AdamW(policy_net.parameters(), lr=1e-3, amsgrad=True)
+#initialize representations of agents
+#each agent has a respective policy network, target network (used for soft updates to parameters) and optimizer
+agents = {i: PolicyNetwork(n_observations, n_actions).to(device) for i in range(n_agents)}
 
-model_path = '/Users/davidscarin/Documents/Uni/MIA/MS/RL-highway-env/models/saved_models/model_default_agents2024-12-10_episode_999.pt'
-
-# Load most recent model
-checkpoint = load_dqn_model(model_path=model_path, policy_net=policy_net, target_net=target_net, optimizer=optimizer)
-
-# Access model information
-episode = checkpoint['episode']
-rewards = checkpoint['episode_rewards']
-durations = checkpoint['episode_durations']
-
-print(f"Total episodes trained: {episode}")
-print(f"Final average reward: {sum(rewards[-100:]) / 100}")  # Last 100 episodes
-
-obs, info = env.reset()
-
-while True:
-    time.sleep(1)
-    state = get_state(obs)
-    actions = get_network_action(state)    
-    obs, reward, terminated, truncated, info = env.step(actions)
-    done = terminated or truncated
-    if done:
-        obs, info = env.reset()
-        
+def load_dqn_model(agents):
     
+    for i_agent in range(n_agents):
+
+        # Load the checkpoint
+        checkpoint_path = f"../models/saved_models/model_default_agents_agent_{i_agent}_2024-12-15_episode_19999_LR_1e-05.pt"
+        if not os.path.exists(checkpoint_path):
+            raise FileNotFoundError(f"No checkpoint found at {checkpoint_path}")
+        
+        checkpoint = torch.load(checkpoint_path)
+        
+        # Load the state dictionaries
+        agents[i_agent].load_state_dict(checkpoint['agent_policy_net_state_dict'])
+
+        print(f"agent {i_agent} using model "+checkpoint_path)
+        
+        # Set starting episode if needed
+        if i_agent == 0:  # only need to do this once
+            starting_episode = checkpoint['episode'] + 1
+            episode_rewards = checkpoint['episode_rewards']
+            episode_durations = checkpoint['episode_durations']
+
+
+def get_network_action(state, policy_net):
+    return torch.argmax(policy_net(state)).item()
+
+max_eps = 100
+
+collisions = []
+arrivals = []
+rewards = []
+
+load_dqn_model(agents)
+
+for episode in range(max_eps):
+    states, info = env.reset()
+
+    num_crashed = 0
+    num_arrived = 0
+    episode_reward = 0
+
+    for t in count():
+
+        crashed = 0
+
+        print(f"starting step {t}")
+        actions_tuple = tuple()
+
+        for i_state in range(len(states)):
+            action = get_network_action(torch.tensor(states[i_state].flatten()), agents[i_state])
+            actions_tuple = actions_tuple + (action, )
+        
+        print("action chosen: ", actions_tuple)
+
+
+        observation, reward, terminated, truncated, info = env.step(actions_tuple)
+        print("terminated", terminated)
+        print("truncated", truncated)
+        print(info)
+        episode_reward+=reward
+    
+        print("mean reward: ", reward)
+        #episode_reward+=reward
+        done = terminated or truncated
+        next_states = observation
+        states = next_states
+
+        if done:
+            num_crashed = info['rewards']['collision_reward']/0.25
+            num_arrived = info['rewards']['arrived_reward']/0.25
+            collisions.append(num_crashed)
+            arrivals.append(num_arrived)
+            rewards.append(episode_reward)
+            break
+
+import matplotlib.pyplot as plt
+
+# Create a figure with two subplots
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(2, 2, figsize=(10, 8))
+
+# Plot rewards
+ax1.plot(rewards, 'b-', label='Rewards')
+ax1.set_title('Episode Rewards')
+ax1.set_xlabel('Episode')
+ax1.set_ylabel('Reward')
+ax1.grid(True)
+ax1.legend()
+
+# Plot crash metric
+ax2.plot(collisions, 'r-', label='Collisions')
+ax2.set_title('Collisions')
+ax2.set_xlabel('Step')
+ax2.set_ylabel('No. Agents Crashed')
+ax2.grid(True)
+ax2.legend()
+
+# Plot crashes per episode
+ax3.plot(arrivals, 'g-', label=f'Arrivals')
+ax3.set_title('Arrivals')
+ax3.set_xlabel('Episode')
+ax3.set_ylabel('No. Agents Arrived')
+ax3.grid(True)
+ax3.legend()
+
+ax4.bar_plot()
+
+# Adjust layout and display
+plt.tight_layout()
+plt.show()
         
