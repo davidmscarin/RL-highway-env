@@ -1,0 +1,86 @@
+\begin{array}{l}
+\textbf{Markov Decision Process (MDP)} \\
+\scriptsize
+\text{An MDP consists of states } (s) \text{, actions } (a) \text{, rewards } (r) \text{,} \\
+\scriptsize
+\text{and transitions } (P(s\text{'} | s, a)). \\
+\scriptsize
+\text{Goal: Maximize the cumulative reward (return) over time.} \\ \\
+\scriptsize
+\end{array}
+
+\begin{array}{l}
+\textbf{Q-Function} \\
+\small
+Q(s, a) = \mathbb{E} \left[ r_t + \gamma \max_{a'} Q(s_{t+1}, a') \mid s_t = s, a_t = a \right] \\ 
+\scriptsize
+\text{where:} \\
+\scriptsize
+\text{- } Q(s, a) \text{ is the value of taking action } a \text{ in state } s. \\
+\scriptsize
+\text{- } r_t \text{ is the immediate reward.} \\
+\scriptsize
+\text{- } \gamma \text{ is the discount factor } (0 \leq \gamma \leq 1). \\ \\
+\end{array}
+
+\begin{array}{l}
+\textbf{Bellman Equation} \\
+\scriptsize
+\text{The Bellman equation defines the recursive relationship for } Q(s, a): \\
+\small
+Q(s, a) = r + \gamma \max_{a'} Q(s', a') \\ \\
+\scriptsize
+\end{array}
+
+\begin{array}{l}
+\textbf{1. Deep Q-Networks} \\
+\scriptsize
+\text{A DQN approximates the Q-function using a deep neural network } \\
+\scriptsize
+\text{parameterized by } \theta: \\
+\small
+Q(s, a; \theta) \approx Q^*(s, a) \\ 
+\scriptsize
+\text{where } Q^*(s, a) \text{ is the optimal Q-function.} \\ \\
+\scriptsize
+\end{array}
+
+\begin{array}{l}
+\textbf{3. Algorithm} \\
+\tiny
+\text{Initialize:} \\
+\tiny
+\quad \text{Replay buffer.} \\
+\tiny
+\quad \text{Q-network with random weights } \theta. \\
+\tiny
+\quad \text{Target network with weights } \theta^- = \theta. \\
+\tiny
+\text{For each episode:} \\
+\tiny
+\quad \text{Initialize the environment and state } s. \\
+\tiny
+\quad \text{For each step:} \\
+\tiny
+\quad \quad \text{Select action } a \text{ using epsilon-greedy policy.} \\
+\tiny
+\quad \quad \text{Execute } a, \text{ observe } r, \text{ and new state } s'. \\
+\tiny
+\quad \quad \text{Store } (s, a, r, s') \text{ in replay buffer.} \\
+\tiny
+\quad \quad \text{Sample mini-batch from replay buffer.} \\
+\tiny
+\quad \quad \text{Compute target:} \\
+\tiny
+\quad \quad \quad y = r + \gamma \max_{a'} Q(s', a'; \theta^-) \\
+\tiny
+\quad \quad \text{Perform gradient descent to minimize loss:} \\
+\tiny
+\quad \quad \quad \nabla_\theta L(\theta) = \nabla_\theta {\left( y - Q(s, a; \theta) \right)}^2 \\
+\tiny
+\quad \quad \text{Update } s = s'. \\
+\tiny
+\text{Periodically:} \\
+\tiny
+\quad \text{Update target network } \theta^- \leftarrow \theta.
+\end{array}

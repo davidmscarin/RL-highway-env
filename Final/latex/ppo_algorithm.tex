@@ -1,0 +1,64 @@
+\begin{array}{l}
+    \textbf{Policy Function} \\
+    \small
+    \pi_\theta(a | s) = \mathbb{P}(a | s; \theta) \\
+    \scriptsize
+    \text{where } \theta \text{ parameterizes the policy network.} \\
+    \scriptsize
+    \text{In PPO, the policy aims to maximize cumulative rewards while ensuring stability } \\
+    \scriptsize
+    \text{by limiting updates using a clipped objective function.} \\\\
+    \scriptsize
+    \end{array}
+    
+    \begin{array}{l}
+    \textbf{2. PPO} \\
+    \scriptsize
+    \text{The PPO objective is to optimize the policy } \\
+    \scriptsize
+    \text{using a clipped surrogate objective:} \\
+    \small
+    L(\theta) = \mathbb{E}_t \left[ \min \left( r_t(\theta) A_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) A_t \right) \right] \\
+    \scriptsize
+    \text{where:} \\
+    \scriptsize
+    \text{- } r_t(\theta) = \frac{\pi_\theta(a_t | s_t)}{\pi_{\theta_{\text{old}}}(a_t | s_t)} \text{ is the probability ratio.} \\
+    \scriptsize
+    \text{- } \epsilon \text{ is the clipping parameter.} \\
+    \scriptsize
+    \text{- } A_t \text{ is the advantage estimate.} \\\\
+    \scriptsize
+    \end{array}
+    
+    \begin{array}{l}
+    \textbf{Algorithm} \\
+    \tiny
+    \text{Initialize:} \\
+    \tiny
+    \quad \text{Policy network } \pi_\theta \text{ and value network } V_\phi \text{ with random weights.} \\
+    \tiny
+    \quad \text{Hyperparameters: clipping threshold } \epsilon, \text{ learning rates, batch size, etc.} \\
+    \tiny
+    \text{For each iteration:} \\
+    \tiny
+    \quad \text{Collect trajectories by running policy } \pi_\theta \text{ in the environment.} \\
+    \tiny
+    \quad \text{Compute rewards-to-go and advantage estimates.} \\
+    \tiny
+    \quad \text{Optimize the policy:} \\
+    \tiny
+    \quad \quad \text{Compute the surrogate objective:} \\
+    \tiny
+    \quad \quad \quad L(\theta) = \mathbb{E}_t \left[ \min \left( r_t(\theta) A_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) A_t \right) \right] \\
+    \tiny
+    \quad \quad \text{Perform gradient ascent to maximize } L(\theta). \\
+    \tiny
+    \quad \text{Optimize the value function:} \\
+    \tiny
+    \quad \quad \text{Minimize the value loss:} \\
+    \tiny
+    \quad \quad \quad L_V(\phi) = \mathbb{E}_t \left[ \left( V_\phi(s_t) - R_t \right)^2 \right] \\
+    \tiny
+    \quad \quad \text{Perform gradient descent to minimize } L_V(\phi). \\
+    \end{array}
+    

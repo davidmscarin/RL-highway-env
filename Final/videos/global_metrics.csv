@@ -1,0 +1,11 @@
+algorithm,policy,traffic,avg_episode_length,global_avg_speed,avg_arrivals_per_episode,avg_collisions_per_episode
+baseline,none,sparse,9.26,5.589818480260105,1.72,1.54
+baseline,none,dense,7.73,5.5997934061533705,1.16,1.61
+dqn,cnn,sparse,11.36,4.73859022084005,2.33,0.48
+dqn,mlp,sparse,11.19,2.9259657168478848,2.25,0.5
+dqn,cnn,dense,8.59,5.155888188102324,1.39,0.97
+dqn,mlp,dense,8.95,3.1245633132204276,1.58,0.98
+ppo,cnn,dense,8.0,3.698083245031638,1.12,1.2
+ppo,mlp,dense,9.15,2.9836742528337137,1.6,0.8
+ppo,cnn,sparse,10.3,3.2630610753564744,1.89,0.77
+ppo,mlp,sparse,10.57,3.1051536583153907,2.01,0.66
