@@ -152,7 +152,7 @@ target_net = DQN(n_observations, n_actions)
 target_net.load_state_dict(policy_net.state_dict())
 optimizer = optim.AdamW(policy_net.parameters(), lr=1e-3, amsgrad=True)
 
-model_path = '/Users/davidscarin/Documents/Uni/MIA/MS/RL-highway-env/models/saved_models/model_2024-11-20_episode_{i_episode+1}.pt'
+model_path = '/home/fsilva/Desktop/MIA/1ano/MS/project/RL-highway-env/models/saved_models/model_default_agents2024-12-10_episode_999.pt'
 
 # Load most recent model
 checkpoint = load_dqn_model(model_path=model_path, policy_net=policy_net, target_net=target_net, optimizer=optimizer)
@@ -168,7 +168,7 @@ print(f"Final average reward: {sum(rewards[-100:]) / 100}")  # Last 100 episodes
 obs, info = env.reset()
 
 while True:
-    time.sleep(1)
+   # time.sleep(1)
     state = get_state(obs)
     actions = get_network_action(state)    
     obs, reward, terminated, truncated, info = env.step(actions)

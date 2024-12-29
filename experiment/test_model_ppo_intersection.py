@@ -18,7 +18,7 @@ env = gym.make(
         },render_mode="rgb_array"
     )
 
-model = PPO.load("intersection_ppo_cnn/model", env=env)
+model = PPO.load("experiment/intersection_ppo_cnn/model", env=env)
 
 while(True):
     obs, info = env.reset()

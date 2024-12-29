@@ -1,9 +1,10 @@
-import gymnasium as gym
+import  gym
 from gymnasium.wrappers import RecordVideo
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.vec_env import SubprocVecEnv
 import pprint
+import highway_env
 
 env = gym.make(
   "highway-v0",
@@ -20,7 +21,7 @@ env = gym.make(
 
 
 
-pprint.pprint(obs)
+#print.pprint(obs)
 
 # Multi-agent environment configuration
 env.unwrapped.config.update({
