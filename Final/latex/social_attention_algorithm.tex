@@ -1,0 +1,69 @@
+\begin{array}{l}
+    \textbf{Policy Function} \\
+    \small
+    \pi_\theta(a | s) = \mathbb{P}(a | s; \theta) \\
+    \scriptsize
+    \text{where } \theta \text{ parameterizes the attention-based policy network.} \\\\
+    \scriptsize
+    \text{The policy leverages social attention} \\
+    \scriptsize
+    \text{to focus on relevant traffic participants.} \\\\
+    \scriptsize
+    \text{The goal is to model interaction} \\
+    \scriptsize
+    \text{patterns and achieve permutation invariance.} \\
+    \scriptsize
+    \end{array}
+
+    \begin{array}{l}
+    \textbf{3. DQN Social Attention} \\
+    \scriptsize
+    \text{The attention mechanism computes context-aware embeddings:} \\
+    \small
+    \text{output} = \sigma \left( \frac{Q K^T}{\sqrt{d_k}} \right) V \\
+    \scriptsize
+    \text{where:} \\
+    \scriptsize
+    Q = L_q(e_0), K = L_k(e_i), V = L_v(e_i) \\
+    \scriptsize
+    \text{- } e_i \text{ represents the encoded state of vehicle } i. \\
+    \scriptsize
+    \text{- } L_q, L_k, L_v \text{ are linear projections.} \\
+    \scriptsize
+    \text{- } \sigma \text{ is the softmax function.} \\
+    \scriptsize
+    \text{- } d_k \text{ is the embedding dimension.} \\
+    \end{array}
+
+    \begin{array}{l}
+    \textbf{Algorithm} \\
+    \scriptsize
+    \text{Initialize:} \\
+    \scriptsize
+    \quad \text{Encoder, attention heads, and decoder networks.} \\
+    \scriptsize
+    \quad \text{Hyperparameters: learning rate, number of attention heads, etc.} \\
+    \scriptsize
+    \text{For each iteration:} \\
+    \scriptsize
+    \quad \text{Observe state } s \text{ with } N \text{ nearby vehicles.} \\
+    \scriptsize
+    \quad \text{Encode the state of each vehicle using a shared encoder:} \\
+    \scriptsize
+    \quad \quad e_i = \text{Encoder}(s_i) \\
+    \scriptsize
+    \quad \text{Apply ego-attention to compute context-aware embeddings:} \\
+    \scriptsize
+    \quad \quad Q = L_q(e_0), K = L_k(e_i), V = L_v(e_i) \\
+    \scriptsize
+    \quad \quad \text{Compute attention output:} \\
+    \scriptsize
+    \quad \quad \quad \text{output} = \sigma \left( \frac{Q K^T}{\sqrt{d_k}} \right) V \\
+    \scriptsize
+    \quad \text{Decode to obtain action values and select optimal action:} \\
+    \scriptsize
+    \quad \quad a^* = \arg\max \pi_\theta(a | s) \\
+    \scriptsize
+    \quad \text{Update policy parameters } \theta \text{ via reinforcement learning.} \\
+    \end{array}
+

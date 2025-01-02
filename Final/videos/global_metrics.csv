@@ -1,11 +1,15 @@
 algorithm,policy,traffic,avg_episode_length,global_avg_speed,avg_arrivals_per_episode,avg_collisions_per_episode
-baseline,none,sparse,9.26,5.589818480260105,1.72,1.54
-baseline,none,dense,7.73,5.5997934061533705,1.16,1.61
-dqn,cnn,sparse,11.36,4.73859022084005,2.33,0.48
-dqn,mlp,sparse,11.19,2.9259657168478848,2.25,0.5
-dqn,cnn,dense,8.59,5.155888188102324,1.39,0.97
-dqn,mlp,dense,8.95,3.1245633132204276,1.58,0.98
-ppo,cnn,dense,8.0,3.698083245031638,1.12,1.2
-ppo,mlp,dense,9.15,2.9836742528337137,1.6,0.8
-ppo,cnn,sparse,10.3,3.2630610753564744,1.89,0.77
-ppo,mlp,sparse,10.57,3.1051536583153907,2.01,0.66
+baseline,none,sparse,9.26,5.58981848,1.72,1.54
+baseline,none,dense,7.73,5.599793406,1.16,1.61
+dqn,cnn,sparse,11.36,4.738590221,2.33,0.48
+dqn,mlp,sparse,11.19,2.925965717,2.25,0.5
+dqn,cnn,dense,8.59,5.155888188,1.39,0.97
+dqn,mlp,dense,8.95,3.124563313,1.58,0.98
+ppo,cnn,dense,8,3.698083245,1.12,1.2
+ppo,mlp,dense,9.15,2.983674253,1.6,0.8
+ppo,cnn,sparse,10.3,3.263061075,1.89,0.77
+ppo,mlp,sparse,10.57,3.105153658,2.01,0.66
+dqn,social attention,sparse,9.29,5.196761422,1.73,1.01
+dqn,social attention,dense,7.37,5.592783199,1.03,1.29
+
+

@@ -481,6 +481,77 @@ with tabs[1]:
         st.markdown(f'<div class=image-container style="text-align: center;">{svg_plot}</div>', unsafe_allow_html=True)
 
 
+    #Social Attention TRAIN
+    latex_file_path = "latex/social_attention_algorithm.tex" 
+    latex_arrays = load_latex_arrays(latex_file_path)
+
+    col1,col2,col3 =st.columns(3)
+    with col1: 
+        display_order = [1] 
+        for index in display_order:
+            if index < len(latex_arrays):
+                try:
+                    st.latex(latex_arrays[index])
+                except Exception as e:
+                    st.error(f"Error rendering LaTeX at index {index}: {str(e)}")
+            else:
+                st.error(f"Invalid index: {index}. Only {len(latex_arrays)} LaTeX arrays are available.")
+        
+    with col2: 
+        display_order = [0] 
+        for index in display_order:
+            if index < len(latex_arrays):
+                try:
+                    st.latex(latex_arrays[index])
+                except Exception as e:
+                    st.error(f"Error rendering LaTeX at index {index}: {str(e)}")
+            else:
+                st.error(f"Invalid index: {index}. Only {len(latex_arrays)} LaTeX arrays are available.")
+
+    with col3: 
+        display_order = [2] 
+        for index in display_order:
+            if index < len(latex_arrays):
+                try:
+                    st.latex(latex_arrays[index])
+                except Exception as e:
+                    st.error(f"Error rendering LaTeX at index {index}: {str(e)}")
+            else:
+                st.error(f"Invalid index: {index}. Only {len(latex_arrays)} LaTeX arrays are available.")
+
+
+    [col1] =st.columns(1)
+    col1.markdown(f'<div style="text-align: left;"><b>DQN Social Attention Train:</b></div>', unsafe_allow_html=True)
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+       
+        svg_plot = load_svg_file("images/social_episode_totalreward.svg")
+
+        st.markdown(f'<div style="text-align: center;">Average Episode Reward:</div>', unsafe_allow_html=True)
+
+        st.markdown(f'<div class=image-container style="text-align: center;">{svg_plot}</div>', unsafe_allow_html=True)
+
+    
+    with col2:
+        # Load and resize the PNG image
+        png_image = Image.open("images/social_episode_reward3d.png")
+        png_image = png_image.resize((600, 365))
+        
+        # Save the image to a BytesIO buffer
+        buffer = io.BytesIO()
+        png_image.save(buffer, format="PNG")
+        buffer.seek(0)
+        
+        st.markdown(f'<div style="text-align: center;">Average Episode Reward (3D View):</div>', unsafe_allow_html=True)
+        
+        st.markdown(
+            f'<div class=image-container style="text-align: center;"><img src="data:image/png;base64,{base64.b64encode(buffer.read()).decode()}" width="600"></div>',
+            unsafe_allow_html=True
+        )
+
+
 
 # Third tab: Simulation
 with tabs[2]:
@@ -502,7 +573,7 @@ with tabs[2]:
         if mlp_selected:
             selected_policies.append("mlp")
         if social_attention_selected:
-            selected_policies.append("Social Attention")
+            selected_policies.append("social attention")
         
         if selected_algorithm and selected_policies:
             st.write(f"#### Algorithm: {selected_algorithm.upper()}     Traffic Density: {selection}")
@@ -514,6 +585,7 @@ with tabs[2]:
             # Always display baseline videos in the first column
             baseline_env_video_path = os.path.join(video_dir, f"environment_baseline_none_{selection}.webm")
             baseline_table_video_path = os.path.join(video_dir, f"speed_baseline_none_{selection}.webm")
+
 
             with columns[0]:
                 if os.path.exists(baseline_env_video_path) and os.path.exists(baseline_table_video_path):
