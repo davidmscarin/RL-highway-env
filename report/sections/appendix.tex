@@ -1,0 +1,67 @@
+\subsection*{Deploying the Multi Agent Reinforcement Learning with Highway-Env Application}
+
+To deploy the \texttt{app.py} Streamlit App, follow these steps:
+
+\begin{enumerate}
+    \item \textbf{Set up the environment:} Ensure that Python is installed, and create a virtual environment to manage dependencies.
+    (\texttt{virtualenv}, \texttt{pyenv} or \texttt{conda} can be used for this).
+    
+    Install Streamlit and other dependencies by running:
+    \begin{verbatim}
+        $ pip install streamlit
+        $ pip install -r requirements.txt
+    \end{verbatim}
+        
+    
+    \item \textbf{Run the Streamlit app:} Start the app using the following command in the terminal:
+    
+    \begin{verbatim}
+        $ streamlit run app.py
+    \end{verbatim}
+
+    This will start the Streamlit app, and it will usually open in a local browser window.
+
+    \item \textbf{Access the application in a browser:} After running the command, the app should automatically open in the default web browser at a local address (e.g., \texttt{http://localhost:8501}). If it doesn't, you can manually open a browser and navigate to this URL to interact with the app.
+\end{enumerate}
+
+
+
+\textbf{Required Files}: The directory in which the app runs should contain at least the following files and directories:
+
+\begin{quote}
+    \textit{app.py}: main file
+
+    \textit{style.html}: auxiliary file
+
+    \textit{requirements.txt}: python environment configuration file
+
+    subdirectory \textit{Train\_and\_Test} containing the Python files concerning training and testing as well as the saved models
+
+    subdirectory \textit{images} containing pre-processed tensorboard log plots 
+
+    subdirectory \textit{global\_metrics\_plots} containing pre-processed metrics plots 
+
+    subdirectory \textit{latex} containing latex code for mermaid graphs
+    
+    subdirectory \textit{videos} containing simulation recorded videos 
+
+
+\end{quote}
+    
+
+\textbf{Required Python Packages:} (Listed on \textit{requirements.txt}):
+\begin{quote}
+
+    matplotlib==3.9.2
+
+    pandas==2.2.3
+
+    seaborn==0.13.2
+
+    streamlit==1.40.1
+    
+    streamlit-mermaid==0.3.0
+    
+\end{quote}
+
+

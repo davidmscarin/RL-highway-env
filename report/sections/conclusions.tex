@@ -1,0 +1,25 @@
+\section{Conclusions}
+
+This project has successfully developed and evaluated a robust and adaptable Multi-Agent System (MAS) for managing autonomous vehicles at road intersections. The primary objectives of the project were to train agents using Deep Reinforcement Learning (DRL) algorithms, evaluate their performance under various traffic conditions, and assess the scalability and robustness of the system.
+
+In the first phase, the agents were trained using a set of DRL algorithms, such as DQN and PPO, to enable autonomous decision-making regarding intersection crossing orders and speed control. The goal was to optimize traffic flow while ensuring that the agents avoid collisions. The training phase was successful, with agents demonstrating the ability to navigate the intersection effectively, adjust their speeds, and follow traffic rules.
+
+In the second phase, the impact of different traffic flow configurations (sparse and dense traffic) on the agents' performance was explored. The evaluation revealed that some algorithms, particularly DQN with Social Attention, demonstrated superior adaptability to the varying traffic densities. In dense traffic scenarios, some algorithms exhibited challenges in maintaining safety and efficiency, leading to higher collision rates and shorter episode lengths.
+
+The third phase of the project focused on evaluating the system's scalability and robustness. The metrics collected during this phase provided valuable insights into how different algorithms perform across multiple simulations with varying environmental conditions. The results showed that while some algorithms like DQN with Social Attention excelled in both efficiency and safety, others, such as PPO, struggled with adaptability under varying traffic conditions.
+
+Overall, the project successfully achieved its objectives by training autonomous agents, evaluating their performance in different environments, and analyzing the scalability and robustness of the system. The classification of algorithms into performance categories such as efficiency, safety, and adaptability provides a clear understanding of each algorithm's strengths and weaknesses.
+
+\section{Future Work}
+
+While this project has provided valuable insights into the performance of different DRL algorithms for managing autonomous vehicles at intersections, there are several areas where future work could further enhance the system:
+
+\begin{itemize}
+    \item \textbf{Exploring Additional DRL Algorithms}: Future work can investigate the use of more advanced DRL algorithms, such as A3C (Asynchronous Advantage Actor-Critic) or TRPO (Trust Region Policy Optimization), to further improve the learning efficiency and performance of the agents. These algorithms might offer better stability or faster convergence compared to the ones used in this study.
+    \item \textbf{Handling Complex Traffic Scenarios}: Future experiments could involve simulating more complex traffic environments, such as intersections with multiple lanes, traffic lights, or various types of vehicles. Introducing more variables could provide a more comprehensive test of the system's robustness and adaptability.
+    \item \textbf{Real-Time Agent Adaptation}: Enhancing the agents' ability to adapt in real-time to sudden changes in traffic patterns (e.g., unexpected vehicle arrivals, accidents, or emergency vehicle scenarios) could be explored. Implementing techniques such as online learning or meta-learning could allow the agents to update their policies during execution.
+    \item \textbf{Integration with Real-World Simulations}: Future research could focus on transferring the learned models to real-world environments, using simulations that closely resemble actual traffic intersections. This would involve integrating sensor data, real-time decision-making, and safety protocols for real-world deployment.
+    \item \textbf{Performance Evaluation in Mixed Traffic Conditions}: Exploring how the trained agents perform in mixed traffic environments with both human-driven and autonomous vehicles would be essential for real-world applications. This could include the analysis of how well the agents cooperate with human drivers or adapt to their actions.
+\end{itemize}
+
+By addressing these areas, the system can be further refined, improving its capabilities in real-world applications for managing autonomous vehicles and contributing to the broader field of intelligent transportation systems.
