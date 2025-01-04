@@ -365,6 +365,84 @@ Which produces an observation array similar to the one represented in the table 
     )
 \end{lstlisting}
 
+\subsubsection{DQN with Social Attention}
+
+Configuration/Implementation based off \textit{rl-agents} GitHub Repository \cite{rl-agents}.
+\subsubsection{1.Initialization}
+
+Environment Setup, Observation Space (JSON encoded): 
+
+\begin{lstlisting}[style=json]
+{
+    "id": "intersection-v0",
+    "import_module": "highway_env",
+    "observation": {
+        "type": "Kinematics",
+        "vehicles_count": 15,
+        "features": ["presence", "x", "y", "vx", "vy", "cos_h", "sin_h"],
+        "features_range": {
+            "x": [-100, 100],
+            "y": [-100, 100],
+            "vx": [-10, 10],
+            "vy": [-10, 10]
+        },
+        "absolute": true,
+        "order": "shuffled"
+    },
+    "initial_vehicle_count": 0,
+    "vehicles_count": 0,
+    "controlled_vehicles": 4,
+    "destination": "o1"
+}
+
+\end{lstlisting}
+
+The Social Attention also uses \textit{Kinematics} observations.
+
+The Action Space and Reward Function are similar to the other approaches. 
+    
+
+\subsubsection{2. Agent Initialization}
+
+The agent used was the \textit{ego\_attention} with 2 heads:
+
+ \begin{lstlisting}[style=json]
+{
+    ...
+    
+    "model": {
+        "type": "EgoAttentionNetwork",
+        "embedding_layer": {
+            "type": "MultiLayerPerceptron",
+            "layers": [64, 64],
+            "reshape": false,
+            "in": 7
+        },
+        "others_embedding_layer": {
+            "type": "MultiLayerPerceptron",
+            "layers": [64, 64],
+            "reshape": false,
+            "in": 7
+        },
+        "self_attention_layer": null,
+        "attention_layer": {
+            "type": "EgoAttention",
+            "feature_size": 64,
+            "heads": 2
+        },
+        "output_layer": {
+            "type": "MultiLayerPerceptron",
+            "layers": [64, 64],
+            "reshape": false
+        }
+    }
+}
+\end{lstlisting}
+
+The embedding layers are two parallel MLPs with identical structures that each take 7-dimensional inputs representing vehicle states. These layers encode the features of both the ego vehicle and surrounding vehicles separately, though they share weights.
+At the core is an attention layer implemented as an \textit{EgoAttention} mechanism with 2 attention heads.
+The final output layer uses an MLP to decode the attention-processed features and produce Q-values for the available actions.
+
 \subsubsection{Decentralized Social Influence DQN}
 
 As for decentralized training, each agent is represented by its own network (and therefore optimizer, during training). This means that each agent's network is being fitted only to its own actions, rewards and observations, rather than their collective counterparts. This approach can benefit training because when using the collective reward and observation, centralized networks might not be able to capture small changes in actions for each agent. Furthermore, this in turn allows us to use Social Influence, a concept in which each agent's behavior is influenced by others, which we will further explain. 
@@ -440,6 +518,14 @@ Below are the logs of these processes:
     \centering
     \includegraphics[height=0.20\textheight]{images/dqn_mlp.png} 
     \caption{DQN with MlpPolicy training Log - Average Reward and Train Loss Evolution}
+\end{figure}
+
+3. DQN with Social Attention
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.20\textheight]{images/dqn_sa.png} 
+    \caption{DQN with Social Attention training Log - Average Reward Evolution and its 3D View.}
 \end{figure}
 
 \subsubsection{PPO}

@@ -244,17 +244,17 @@ We will compare agents' behavior based on four distinct policies:
     
     The \textit{MlpPolicy} utilizes a multi-layer perceptron neural network to process environmental observations and make decisions. This policy focuses on key input features, such as speed, distance to other vehicles, and intersection layout, allowing agents to act based on their immediate surroundings.
 
-    Scenario: Agents following the \textit{MlpPolicy} will navigate the intersection by leveraging their observed features, applying learned behaviors to respond effectively to dynamic traffic conditions.
+    \textbf{Scenario}: Agents following the \textit{MlpPolicy} will navigate the intersection by leveraging their observed features, applying learned behaviors to respond effectively to dynamic traffic conditions.
 
-    Objective: Assess the performance of \textit{MlpPolicy} agents in terms of efficiency (e.g., throughput, wait times) and safety (e.g., collision rates) compared to agents using other policies. Analyze the influence of input features on their decision-making processes.
+    \texbf{Objective}: Assess the performance of \textit{MlpPolicy} agents in terms of efficiency (e.g., throughput, wait times) and safety (e.g., collision rates) compared to agents using other policies. Analyze the influence of input features on their decision-making processes.
 
     \item\textbf{CnnPolicy (Convolutional Neural Network Policy)}
     
     The \textit{CnnPolicy} employs convolutional neural networks to process visual and spatial data, making it particularly effective in scenarios where visual inputs (like grid representations of the intersection) are crucial for decision-making.
 
-    Scenario: Agents using the \textit{CnnPolicy} will interpret complex visual representations of their environment, allowing them to make informed decisions regarding lane changes, merging, and crossing orders.
+    \texbf{Scenario}: Agents using the \textit{CnnPolicy} will interpret complex visual representations of their environment, allowing them to make informed decisions regarding lane changes, merging, and crossing orders.
 
-    Objective: Evaluate the performance of \textit{CnnPolicy} agents in diverse traffic patterns, focusing on their ability to recognize spatial configurations and respond appropriately to traffic dynamics.
+    \textbf{Objective}: Evaluate the performance of \textit{CnnPolicy} agents in diverse traffic patterns, focusing on their ability to recognize spatial configurations and respond appropriately to traffic dynamics.
 
     \item\textbf{Social Attention Mechanisms Policy}
     
@@ -298,12 +298,36 @@ Q(s_t, a_t) = \mathbb{E}\left[r_t + \gamma \max_{a_{t+1}} Q(s_{t+1}, a_{t+1}; \t
 \]
 where $s_t$ now includes the social context $\tilde{s}_t$, representing the attention-weighted sum of the agent’s own state and the states of the other agents. The DQN network then estimates the Q-values with this enriched state.
 
+\paragraph{Multi-Head Attention Implementation}
+The attention mechanism utilizes multiple heads to compute context-sensitive embeddings, allowing the model to attend to different aspects of the input simultaneously. Each head processes the embeddings independently and outputs its own context-aware representation. The outputs from all heads are concatenated and projected to form the final embedding. The attention computation for each head is given by\cite{DBLP:journals/corr/abs-1911-12250}:
+\[
+\text{output} = \sigma \left( \frac{Q K^T}{\sqrt{d_k}} \right) V
+\]
+where:
+\[
+Q = L_q(e_0), \; K = L_k(e_i), \; V = L_v(e_i)
+\]
+
+In these equations:
+- $e_i$ denotes the encoded state of vehicle $i$, while $e_0$ corresponds to the ego-vehicle
+- $K$ (keys) represents descriptive features of surrounding vehicles
+- $V$ (values) contains the embedded features used to compute the final output
+- $L_q$, $L_k$, $L_v$ are shared linear projections applied to all vehicles' embeddings
+- $\sigma$ is the softmax activation, normalizing attention scores across all vehicles
+- $d_k$ represents the dimension of the key embeddings
+
+The ego-vehicle query $Q$ interacts with keys $K$ to compute attention weights, prioritizing vehicles that are most relevant to the ego-vehicle's current context. This results in a weighted combination of values $V$. The outputs from each head are aggregated and passed through a linear layer to produce the final representation.
+
+
     This approach helps agents develop cooperative strategies and optimize their interactions with other vehicles. 
     The attention architecture was introduced to enable neural networks to discover inter-dependencies within a variable number of inputs\cite{vaswani2017attention}.
 
-    Scenario: Agents utilizing this policy will actively monitor the behavior of surrounding vehicles, adapting their actions based on predicted movements and intentions of others.
 
-    Objective: Investigate the effectiveness of social attention in enhancing cooperation among agents, potentially leading to improved traffic flow and reduced collision rates. 
+
+    
+    \textbf{Scenario}: Agents utilizing this policy will actively monitor the behavior of surrounding vehicles, adapting their actions based on predicted movements and intentions of others.
+
+    \textbf{Objective}: Investigate the effectiveness of social attention in enhancing cooperation among agents, potentially leading to improved traffic flow and reduced collision rates. 
     Compare the performance of agents using Social Attention Mechanisms against those following other policies to assess their overall effectiveness in a multi-agent environment.
 \end{enumerate}
 
