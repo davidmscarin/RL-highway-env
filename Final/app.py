@@ -485,31 +485,9 @@ with tabs[1]:
     latex_file_path = "latex/social_attention_algorithm.tex" 
     latex_arrays = load_latex_arrays(latex_file_path)
 
-    col1,col2,col3 =st.columns(3)
+    col1,col2 =st.columns(2)
     with col1: 
-        display_order = [1] 
-        for index in display_order:
-            if index < len(latex_arrays):
-                try:
-                    st.latex(latex_arrays[index])
-                except Exception as e:
-                    st.error(f"Error rendering LaTeX at index {index}: {str(e)}")
-            else:
-                st.error(f"Invalid index: {index}. Only {len(latex_arrays)} LaTeX arrays are available.")
-        
-    with col2: 
         display_order = [0] 
-        for index in display_order:
-            if index < len(latex_arrays):
-                try:
-                    st.latex(latex_arrays[index])
-                except Exception as e:
-                    st.error(f"Error rendering LaTeX at index {index}: {str(e)}")
-            else:
-                st.error(f"Invalid index: {index}. Only {len(latex_arrays)} LaTeX arrays are available.")
-
-    with col3: 
-        display_order = [2] 
         for index in display_order:
             if index < len(latex_arrays):
                 try:

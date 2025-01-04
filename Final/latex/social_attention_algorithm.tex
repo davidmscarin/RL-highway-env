@@ -1,69 +1,39 @@
 \begin{array}{l}
-    \textbf{Policy Function} \\
-    \small
-    \pi_\theta(a | s) = \mathbb{P}(a | s; \theta) \\
-    \scriptsize
-    \text{where } \theta \text{ parameterizes the attention-based policy network.} \\\\
-    \scriptsize
-    \text{The policy leverages social attention} \\
-    \scriptsize
-    \text{to focus on relevant traffic participants.} \\\\
-    \scriptsize
-    \text{The goal is to model interaction} \\
-    \scriptsize
-    \text{patterns and achieve permutation invariance.} \\
-    \scriptsize
-    \end{array}
-
-    \begin{array}{l}
     \textbf{3. DQN Social Attention} \\
     \scriptsize
-    \text{The attention mechanism computes context-aware embeddings:} \\
+    \text{The attention mechanism utilizes multiple heads to compute context-sensitive embeddings, allowing the model to} \\
+    \scriptsize
+    \text{attend to different aspects of the input simultaneously. Each head processes the embeddings independently and} \\
+    \scriptsize
+    \text{outputs its own context-aware representation. The outputs from all heads are concatenated and projected to form} \\
+    \scriptsize
+    \text{the final embedding. The attention computation for each head is given by:} \\
     \small
     \text{output} = \sigma \left( \frac{Q K^T}{\sqrt{d_k}} \right) V \\
     \scriptsize
     \text{where:} \\
     \scriptsize
-    Q = L_q(e_0), K = L_k(e_i), V = L_v(e_i) \\
+    Q = L_q(e_0), \; K = L_k(e_i), \; V = L_v(e_i) \\
     \scriptsize
-    \text{- } e_i \text{ represents the encoded state of vehicle } i. \\
+    \text{- } e_i \text{ denotes the encoded state of vehicle } i, \text{ while } e_0 \text{ corresponds to the ego-vehicle.} \\
     \scriptsize
-    \text{- } L_q, L_k, L_v \text{ are linear projections.} \\
+    \text{- } K \text{ (keys) represents descriptive features of surrounding vehicles.} \\
     \scriptsize
-    \text{- } \sigma \text{ is the softmax function.} \\
+    \text{- } V \text{ (values) contains the embedded features used to compute the final output.} \\
     \scriptsize
-    \text{- } d_k \text{ is the embedding dimension.} \\
-    \end{array}
-
-    \begin{array}{l}
-    \textbf{Algorithm} \\
+    \text{- } L_q, \, L_k, \, L_v \text{ are shared linear projections applied to all vehicles' embeddings.} \\
     \scriptsize
-    \text{Initialize:} \\
+    \text{- } \sigma \text{ is the softmax activation, normalizing attention scores across all vehicles.} \\
     \scriptsize
-    \quad \text{Encoder, attention heads, and decoder networks.} \\
+    \text{- } d_k \text{ represents the dimension of the key embeddings.} \\
     \scriptsize
-    \quad \text{Hyperparameters: learning rate, number of attention heads, etc.} \\
+    \text{The ego-vehicle query } Q \text{ interacts with keys } K \text{ to compute attention weights, prioritizing vehicles } \\
     \scriptsize
-    \text{For each iteration:} \\
+    \text{that are most relevant to the ego-vehicle's current context. This results in a weighted combination of values } V. \\
     \scriptsize
-    \quad \text{Observe state } s \text{ with } N \text{ nearby vehicles.} \\
+    \text{The outputs from each head are aggregated and passed through a linear layer to produce the final representation.} \\
     \scriptsize
-    \quad \text{Encode the state of each vehicle using a shared encoder:} \\
+    \text{The entire process is permutation-invariant, ensuring robust handling of varying numbers and orders of vehicles.} \\
     \scriptsize
-    \quad \quad e_i = \text{Encoder}(s_i) \\
-    \scriptsize
-    \quad \text{Apply ego-attention to compute context-aware embeddings:} \\
-    \scriptsize
-    \quad \quad Q = L_q(e_0), K = L_k(e_i), V = L_v(e_i) \\
-    \scriptsize
-    \quad \quad \text{Compute attention output:} \\
-    \scriptsize
-    \quad \quad \quad \text{output} = \sigma \left( \frac{Q K^T}{\sqrt{d_k}} \right) V \\
-    \scriptsize
-    \quad \text{Decode to obtain action values and select optimal action:} \\
-    \scriptsize
-    \quad \quad a^* = \arg\max \pi_\theta(a | s) \\
-    \scriptsize
-    \quad \text{Update policy parameters } \theta \text{ via reinforcement learning.} \\
-    \end{array}
-
+    \text{The final result is a dot product of values and key-similarities, capturing the most relevant contextual information.} \\
+\end{array}
