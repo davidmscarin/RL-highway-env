@@ -14,48 +14,53 @@
 \contentsline {paragraph}{State Representation with Social Attention}{10}{paragraph*.6}%
 \contentsline {paragraph}{Social Attention Weights}{10}{paragraph*.7}%
 \contentsline {paragraph}{Modifying the Q-Function with Attention}{10}{paragraph*.8}%
+\contentsline {paragraph}{Multi-Head Attention Implementation}{10}{paragraph*.9}%
 \contentsline {section}{\numberline {3.4}Testing Framework for Operation Policies (Scenarios)}{11}{section.3.4}%
 \contentsline {section}{\numberline {3.5}Global Key Performance Indicators (KPI)}{11}{section.3.5}%
-\contentsline {chapter}{\numberline {4}Methodology}{12}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Approach}{12}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Successfully train the agents}{13}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Reinforcement Learning Training Process}{13}{subsection.4.2.1}%
-\contentsline {subsubsection}{1.Initialization}{13}{subsubsection*.9}%
-\contentsline {subsubsection}{2.Agent Initialization}{13}{subsubsection*.10}%
-\contentsline {subsubsection}{3.Interaction with the Environment}{14}{subsubsection*.11}%
-\contentsline {subsubsection}{4.Experience Storage}{14}{subsubsection*.12}%
-\contentsline {subsubsection}{5.Policy Optimization}{14}{subsubsection*.13}%
-\contentsline {subsubsection}{6.Evaluation and Improvement}{14}{subsubsection*.14}%
-\contentsline {subsubsection}{7.End of Training}{14}{subsubsection*.15}%
-\contentsline {subsection}{\numberline {4.2.2}Practical Training Implementation - Configuration}{15}{subsection.4.2.2}%
-\contentsline {subsubsection}{DQN and PPO with CnnPolicy }{15}{subsubsection*.16}%
-\contentsline {subsubsection}{1.Initialization}{15}{subsubsection*.17}%
-\contentsline {subsubsection}{2.1 - Agent Initialization for DQN algorithm using CnnPolicy}{16}{subsubsection*.18}%
-\contentsline {subsubsection}{2.2 - Agent Initialization for PPO algorithm using CnnPolicy}{16}{subsubsection*.19}%
-\contentsline {subsubsection}{DQN and PPO with MlpPolicy }{16}{subsubsection*.20}%
-\contentsline {subsubsection}{1.Initialization}{16}{subsubsection*.21}%
-\contentsline {subsubsection}{2.1 - Agent Initialization for DQN algorithm using MlpPolicy}{17}{subsubsection*.22}%
-\contentsline {subsubsection}{2.2 - Agent Initialization for PPO algorithm using MlpPolicy}{18}{subsubsection*.23}%
-\contentsline {subsection}{\numberline {4.2.3}Practical Training Implementation - Execution and Results}{18}{subsection.4.2.3}%
-\contentsline {subsubsection}{DQN}{18}{subsubsection*.24}%
-\contentsline {subsubsection}{PPO}{19}{subsubsection*.25}%
-\contentsline {section}{\numberline {4.3}Introducing System Perturbations}{20}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Pipeline for Agent Policy Evaluation}{20}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Streamlit Application for RL Highway-Env}{20}{subsection.4.3.2}%
-\contentsline {subsubsection}{Sidebar Configuration}{21}{subsubsection*.26}%
-\contentsline {section}{\numberline {4.4}Evaluate system scalability and robustness}{24}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Metrics Description}{24}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Metrics Collection}{25}{subsection.4.4.2}%
-\contentsline {chapter}{\numberline {5}Results and Discussion}{28}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Results and Discussion}{28}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Average Episode Length}{30}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Global Average Speed}{30}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Average Arrivals per Episode and Average Collisions per Episode}{31}{subsection.5.1.3}%
-\contentsline {section}{\numberline {5.2}Performance Classification of Algorithms/Policies}{33}{section.5.2}%
-\contentsline {subsubsection}{Efficiency}{33}{subsubsection*.27}%
-\contentsline {subsubsection}{Safety}{33}{subsubsection*.28}%
-\contentsline {subsubsection}{Adaptability}{34}{subsubsection*.29}%
-\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{35}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Conclusions}{35}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Future Work}{35}{section.6.2}%
-\contentsline {chapter}{\numberline {A}Appendix: Deploying the App}{38}{appendix.A}%
+\contentsline {chapter}{\numberline {4}Methodology}{13}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Approach}{13}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Successfully train the agents}{14}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Reinforcement Learning Training Process}{14}{subsection.4.2.1}%
+\contentsline {subsubsection}{1.Initialization}{14}{subsubsection*.10}%
+\contentsline {subsubsection}{2.Agent Initialization}{14}{subsubsection*.11}%
+\contentsline {subsubsection}{3.Interaction with the Environment}{15}{subsubsection*.12}%
+\contentsline {subsubsection}{4.Experience Storage}{15}{subsubsection*.13}%
+\contentsline {subsubsection}{5.Policy Optimization}{15}{subsubsection*.14}%
+\contentsline {subsubsection}{6.Evaluation and Improvement}{15}{subsubsection*.15}%
+\contentsline {subsubsection}{7.End of Training}{15}{subsubsection*.16}%
+\contentsline {subsection}{\numberline {4.2.2}Practical Training Implementation - Configuration}{16}{subsection.4.2.2}%
+\contentsline {subsubsection}{DQN and PPO with CnnPolicy }{16}{subsubsection*.17}%
+\contentsline {subsubsection}{1.Initialization}{16}{subsubsection*.18}%
+\contentsline {subsubsection}{2.1 - Agent Initialization for DQN algorithm using CnnPolicy}{17}{subsubsection*.19}%
+\contentsline {subsubsection}{2.2 - Agent Initialization for PPO algorithm using CnnPolicy}{17}{subsubsection*.20}%
+\contentsline {subsubsection}{DQN and PPO with MlpPolicy }{17}{subsubsection*.21}%
+\contentsline {subsubsection}{1.Initialization}{17}{subsubsection*.22}%
+\contentsline {subsubsection}{2.1 - Agent Initialization for DQN algorithm using MlpPolicy}{18}{subsubsection*.23}%
+\contentsline {subsubsection}{2.2 - Agent Initialization for PPO algorithm using MlpPolicy}{19}{subsubsection*.24}%
+\contentsline {subsubsection}{DQN with Social Attention}{19}{subsubsection*.25}%
+\contentsline {subsubsection}{1.Initialization}{19}{subsubsection*.26}%
+\contentsline {subsubsection}{2. Agent Initialization}{19}{subsubsection*.27}%
+\contentsline {subsubsection}{Decentralized Social Influence DQN}{20}{subsubsection*.28}%
+\contentsline {subsection}{\numberline {4.2.3}Practical Training Implementation - Execution and Results}{21}{subsection.4.2.3}%
+\contentsline {subsubsection}{DQN}{22}{subsubsection*.29}%
+\contentsline {subsubsection}{PPO}{23}{subsubsection*.30}%
+\contentsline {section}{\numberline {4.3}Introducing System Perturbations}{23}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Pipeline for Agent Policy Evaluation}{23}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Streamlit Application for RL Highway-Env}{24}{subsection.4.3.2}%
+\contentsline {subsubsection}{Sidebar Configuration}{24}{subsubsection*.31}%
+\contentsline {section}{\numberline {4.4}Evaluate system scalability and robustness}{27}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Metrics Description}{27}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Metrics Collection}{28}{subsection.4.4.2}%
+\contentsline {chapter}{\numberline {5}Results and Discussion}{31}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Results and Discussion}{31}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Average Episode Length}{32}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Global Average Speed}{33}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Average Arrivals per Episode and Average Collisions per Episode}{34}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Performance Classification of Algorithms/Policies}{36}{section.5.2}%
+\contentsline {subsubsection}{Efficiency}{36}{subsubsection*.32}%
+\contentsline {subsubsection}{Safety}{36}{subsubsection*.33}%
+\contentsline {subsubsection}{Adaptability}{37}{subsubsection*.34}%
+\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{38}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusions}{38}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Future Work}{38}{section.6.2}%
+\contentsline {chapter}{\numberline {A}Appendix: Deploying the App}{41}{appendix.A}%

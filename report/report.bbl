@@ -75,46 +75,69 @@
       \verb https://arxiv.org/abs/1805.07733
       \endverb
     \endentry
-    \entry{mnih2015human}{article}{}
-      \true{moreauthor}
-      \true{morelabelname}
-      \name{author}{3}{}{%
-        {{hash=f7d23cfe4ca0e6bf7a8c251bfa78aca6}{%
-           family={Mnih},
-           familyi={M\bibinitperiod},
-           given={Volodymyr},
-           giveni={V\bibinitperiod}}}%
-        {{hash=481308b301166b521c74fde6566e97e6}{%
-           family={Kavukcuoglu},
-           familyi={K\bibinitperiod},
-           given={Koray},
-           giveni={K\bibinitperiod}}}%
-        {{hash=89dbd30410c2085cd059f32c57d4593e}{%
-           family={Silver},
-           familyi={S\bibinitperiod},
-           given={David},
-           giveni={D\bibinitperiod}}}%
+    \entry{rl-agents}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=7b53512730787663ca2ecd7377cdf557}{%
+           family={Leurent},
+           familyi={L\bibinitperiod},
+           given={Edouard},
+           giveni={E\bibinitperiod}}}%
       }
       \list{publisher}{1}{%
-        {Springer Nature}%
+        {GitHub}%
       }
-      \strng{namehash}{0a246cb6a7df23446d91986c3b608fd8}
-      \strng{fullhash}{0a246cb6a7df23446d91986c3b608fd8}
-      \strng{bibnamehash}{0a246cb6a7df23446d91986c3b608fd8}
-      \strng{authorbibnamehash}{0a246cb6a7df23446d91986c3b608fd8}
-      \strng{authornamehash}{0a246cb6a7df23446d91986c3b608fd8}
-      \strng{authorfullhash}{0a246cb6a7df23446d91986c3b608fd8}
-      \field{sortinit}{M}
-      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \strng{namehash}{7b53512730787663ca2ecd7377cdf557}
+      \strng{fullhash}{7b53512730787663ca2ecd7377cdf557}
+      \strng{bibnamehash}{7b53512730787663ca2ecd7377cdf557}
+      \strng{authorbibnamehash}{7b53512730787663ca2ecd7377cdf557}
+      \strng{authornamehash}{7b53512730787663ca2ecd7377cdf557}
+      \strng{authorfullhash}{7b53512730787663ca2ecd7377cdf557}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{Nature}
-      \field{number}{7540}
-      \field{title}{Human-level control through deep reinforcement learning}
-      \field{volume}{518}
-      \field{year}{2015}
-      \field{pages}{529\bibrangedash 533}
-      \range{pages}{5}
+      \field{howpublished}{\url{https://github.com/eleurent/rl-agents}}
+      \field{journaltitle}{GitHub repository}
+      \field{title}{rl-agents: Implementations of Reinforcement Learning algorithms}
+      \field{year}{2018}
+    \endentry
+    \entry{DBLP}{article}{}
+      \name{author}{2}{}{%
+        {{hash=7b53512730787663ca2ecd7377cdf557}{%
+           family={Leurent},
+           familyi={L\bibinitperiod},
+           given={Edouard},
+           giveni={E\bibinitperiod}}}%
+        {{hash=71a533c0c9d35fb99738fd0c515bbd50}{%
+           family={Mercat},
+           familyi={M\bibinitperiod},
+           given={Jean},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{ca0ae78629b038b2578afd24fe8bf6e0}
+      \strng{fullhash}{ca0ae78629b038b2578afd24fe8bf6e0}
+      \strng{bibnamehash}{ca0ae78629b038b2578afd24fe8bf6e0}
+      \strng{authorbibnamehash}{ca0ae78629b038b2578afd24fe8bf6e0}
+      \strng{authornamehash}{ca0ae78629b038b2578afd24fe8bf6e0}
+      \strng{authorfullhash}{ca0ae78629b038b2578afd24fe8bf6e0}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{Social Attention for Autonomous Decision-Making in Dense Traffic}
+      \field{volume}{abs/1911.12250}
+      \field{year}{2019}
+      \verb{eprint}
+      \verb 1911.12250
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1911.12250
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1911.12250
+      \endverb
     \endentry
     \entry{mnih2015dqn}{article}{}
       \name{author}{19}{}{%
@@ -430,6 +453,9 @@
       \field{year}{2017}
     \endentry
   \enddatalist
+  \missing{jaques2019social}
+  \missing{mnih2015human}
+  \missing{pytorch_rl_tutorial}
 \endrefsection
 \endinput
 

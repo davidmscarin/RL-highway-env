@@ -246,13 +246,13 @@ We will compare agents' behavior based on four distinct policies:
 
     \textbf{Scenario}: Agents following the \textit{MlpPolicy} will navigate the intersection by leveraging their observed features, applying learned behaviors to respond effectively to dynamic traffic conditions.
 
-    \texbf{Objective}: Assess the performance of \textit{MlpPolicy} agents in terms of efficiency (e.g., throughput, wait times) and safety (e.g., collision rates) compared to agents using other policies. Analyze the influence of input features on their decision-making processes.
+    \textbf{Objective}: Assess the performance of \textit{MlpPolicy} agents in terms of efficiency (e.g., throughput, wait times) and safety (e.g., collision rates) compared to agents using other policies. Analyze the influence of input features on their decision-making processes.
 
     \item\textbf{CnnPolicy (Convolutional Neural Network Policy)}
     
     The \textit{CnnPolicy} employs convolutional neural networks to process visual and spatial data, making it particularly effective in scenarios where visual inputs (like grid representations of the intersection) are crucial for decision-making.
 
-    \texbf{Scenario}: Agents using the \textit{CnnPolicy} will interpret complex visual representations of their environment, allowing them to make informed decisions regarding lane changes, merging, and crossing orders.
+    \textbf{Scenario}: Agents using the \textit{CnnPolicy} will interpret complex visual representations of their environment, allowing them to make informed decisions regarding lane changes, merging, and crossing orders.
 
     \textbf{Objective}: Evaluate the performance of \textit{CnnPolicy} agents in diverse traffic patterns, focusing on their ability to recognize spatial configurations and respond appropriately to traffic dynamics.
 
@@ -299,7 +299,7 @@ Q(s_t, a_t) = \mathbb{E}\left[r_t + \gamma \max_{a_{t+1}} Q(s_{t+1}, a_{t+1}; \t
 where $s_t$ now includes the social context $\tilde{s}_t$, representing the attention-weighted sum of the agent’s own state and the states of the other agents. The DQN network then estimates the Q-values with this enriched state.
 
 \paragraph{Multi-Head Attention Implementation}
-The attention mechanism utilizes multiple heads to compute context-sensitive embeddings, allowing the model to attend to different aspects of the input simultaneously. Each head processes the embeddings independently and outputs its own context-aware representation. The outputs from all heads are concatenated and projected to form the final embedding. The attention computation for each head is given by\cite{DBLP:journals/corr/abs-1911-12250}:
+The attention mechanism utilizes multiple heads to compute context-sensitive embeddings, allowing the model to attend to different aspects of the input simultaneously. Each head processes the embeddings independently and outputs its own context-aware representation. The outputs from all heads are concatenated and projected to form the final embedding. The attention computation for each head is given by\cite{DBLP}:
 \[
 \text{output} = \sigma \left( \frac{Q K^T}{\sqrt{d_k}} \right) V
 \]

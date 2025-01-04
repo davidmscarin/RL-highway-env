@@ -2368,8 +2368,12 @@
     <bcf:citekey order="5" intorder="1">vaswani2017attention</bcf:citekey>
     <bcf:citekey order="6" intorder="1">jiang2018learning</bcf:citekey>
     <bcf:citekey order="7" intorder="1">mnih2015human</bcf:citekey>
-    <bcf:citekey order="8" intorder="1">vaswani2017attention</bcf:citekey>
-    <bcf:citekey order="9" intorder="1">stable-baselines3</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">DBLP</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">vaswani2017attention</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">stable-baselines3</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">rl-agents</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">pytorch_rl_tutorial</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">jaques2019social</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

@@ -1,0 +1,19 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is 'report.blg'
+[41] biber:340> INFO - === Sat Jan  4, 2025, 17:10:35
+[49] Biber.pm:419> INFO - Reading 'report.bcf'
+[83] Biber.pm:979> INFO - Found 12 citekeys in bib section 0
+[89] Biber.pm:4419> INFO - Processing section 0
+[95] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
+[96] bibtex.pm:1713> INFO - LaTeX decoding ...
+[101] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[165] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[165] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[165] Biber.pm:4239> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[165] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[172] bbl.pm:660> INFO - Writing 'report.bbl' with encoding 'UTF-8'
+[175] bbl.pm:763> INFO - Output to report.bbl
+[175] Biber.pm:131> WARN - I didn't find a database entry for 'mnih2015human' (section 0)
+[175] Biber.pm:131> WARN - I didn't find a database entry for 'pytorch_rl_tutorial' (section 0)
+[175] Biber.pm:131> WARN - I didn't find a database entry for 'jaques2019social' (section 0)
+[175] Biber.pm:133> INFO - WARNINGS: 3
