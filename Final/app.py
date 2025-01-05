@@ -227,14 +227,14 @@ if "metrics_visibility" not in st.session_state:
     st.session_state.metrics_visibility = {}
 
 with st.sidebar:
-    selected_algorithm = st.radio("Please select an RL algorithm", ["Base Line","DQN", "PPO"])
+    selected_algorithm = st.radio("Please select an RL algorithm", ["Base Line","DQN", "PPO"],  index=1)
 
     st.markdown('<hr>', unsafe_allow_html=True)
 
     st.write("Please select an Agent Policy:")
     none_selected = st.checkbox("None", value=True)
-    cnn_selected = st.checkbox("Cnn Policy", value=False)
-    mlp_selected = st.checkbox("Mlp Policy", value=False)
+    cnn_selected = st.checkbox("Cnn Policy", value=True)
+    mlp_selected = st.checkbox("Mlp Policy", value=True)
     social_attention_selected = st.checkbox("Social Attention", value=False)
 
     st.markdown('<hr>', unsafe_allow_html=True)
@@ -262,7 +262,6 @@ with tabs[0]:
     markdown_file = "latex/intro.md"
 
     sections = parse_markdown_sections(markdown_file)
-    print(sections)
     st.markdown("#### 1. Project Description")
     
     st.markdown("##### Ojective:")
@@ -503,10 +502,6 @@ with tabs[1]:
         )
 
 
-
-
-
-
     #PPO TRAIN
     latex_file_path = "latex/ppo_algorithm.tex" 
     latex_arrays = load_latex_arrays(latex_file_path)
@@ -582,6 +577,8 @@ with tabs[1]:
 # Third tab: Simulation
 with tabs[2]:
     st.write("#### Exploring the performance of RL algorithms under different operating policies")
+    
+    global_metrics_file = "videos/global_metrics.csv"
 
     if selection and st.session_state.play_videos:
         if selected_algorithm == "Base Line":
@@ -615,6 +612,7 @@ with tabs[2]:
 
             with columns[0]:
                 if os.path.exists(baseline_env_video_path) and os.path.exists(baseline_table_video_path):
+
                     def get_base64_video(video_path):
                         with open(video_path, "rb") as file:
                             video_bytes = file.read()
@@ -654,8 +652,37 @@ with tabs[2]:
                         """,
                         unsafe_allow_html=True,
                     )
-                else:
-                    st.warning(f"Baseline videos are missing for Traffic Density: {selection}.")
+
+                    if "none_metrics_visible" not in st.session_state.metrics_visibility:
+                        st.session_state.metrics_visibility["none_metrics_visible"] = False
+
+                    if st.button(f"Show Indicators - {selected_policies[0].upper()}", key=f"metrics_0"):
+                        st.session_state.metrics_visibility["none_metrics_visible"] = not st.session_state.metrics_visibility["none_metrics_visible"]
+
+                    # Show or hide metrics based on the state
+                    if st.session_state.metrics_visibility["none_metrics_visible"]:
+                        if os.path.exists(global_metrics_file):
+                            df = pd.read_csv(global_metrics_file)
+                            filtered_metrics = df[
+                                (df['algorithm'] == "baseline") &
+                                (df['policy'] == "none") &
+                                (df['traffic'] == selection)
+                            ]
+                            if not filtered_metrics.empty:
+                                avg_episode_length = filtered_metrics['avg_episode_length'].values[0]
+                                global_avg_speed = filtered_metrics['global_avg_speed'].values[0]
+                                avg_arrivals_per_episode = filtered_metrics['avg_arrivals_per_episode'].values[0]
+                                avg_collisions_per_episode = filtered_metrics['avg_collisions_per_episode'].values[0]
+
+                                st.write(f"### {selected_policies[0].upper()} - Indicators")
+                                st.write(f"**Average Episode Length:** {avg_episode_length}")
+                                st.write(f"**Global Average Speed:** {global_avg_speed:.2f}")
+                                st.write(f"**Average Arrivals per Episode:** {avg_arrivals_per_episode}")
+                                st.write(f"**Average Collisions per Episode:** {avg_collisions_per_episode}")
+                            else:
+                                st.warning(f"No global metrics found for {selected_algorithm.upper()} | {selected_policies[0].upper()} | {selection}.")
+                        else:
+                            st.warning("Global metrics CSV file is missing.")
 
             # Display videos for the selected algorithm and policies
             for idx, policy in enumerate(selected_policies): 
@@ -731,12 +758,6 @@ with tabs[2]:
                                     st.write(f"**Global Average Speed:** {global_avg_speed:.2f}")
                                     st.write(f"**Average Arrivals per Episode:** {avg_arrivals_per_episode}")
                                     st.write(f"**Average Collisions per Episode:** {avg_collisions_per_episode}")
-                                else:
-                                    st.warning(f"No global metrics found for {selected_algorithm.upper()} | {policy.upper()} | {selection}.")
-                            else:
-                                st.warning("Global metrics CSV file is missing.")
-                else:
-                    st.warning(f"Some videos are missing for Algorithm: {selected_algorithm.upper()} and Policy: {policy.upper()}. Please make sure all environment and table videos for {selection} are generated.")
         else:
             st.warning("Please select at least one policy.")
     else:
