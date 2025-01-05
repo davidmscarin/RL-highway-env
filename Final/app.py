@@ -16,10 +16,8 @@ st.set_page_config(
     layout="wide"        
 )
 
-# Add the 'latex' subdirectory to the system path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'latex'))
 
-# Now you can import the mermaid module from the 'latex' directory
 from latex.mermaid import decision_flow_code, training_sequence_code, causal_loop_code, \
     interaction_diagram_code, entity_relationship_code, simulation_goals_code, \
     system_variables_code,system_representation, main_entities, operation_policy, system_code_metrics,system_code_scenarios
@@ -44,7 +42,6 @@ def load_latex_arrays(file_path):
     matches = re.findall(pattern, content, re.DOTALL)  # DOTALL allows matching across multiple lines
 
     for match in matches:
-        # Add the r""" at the start and """ at the end for correct format in Streamlit
         array_content = r""" \begin{array}{l}""" + match + r"""\end{array} """
         arrays.append(array_content)
     
@@ -123,26 +120,31 @@ def get_base64_image(image_path):
     img_base64 = base64.b64encode(img_bytes).decode()
     return img_base64
 
-def render_mermaid(mermaid_code, height=400):
+def render_mermaid(mermaid_code, height=400, font_size="18px"):
     mermaid_html = f"""
     <html>
     <head>
         <style>
             /* Custom box style */
-                    .shadow-box {{
-                        border-radius: 15px;
-                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-                        margin: 20px auto; 
-                        padding: 20px;
-                        background-color: #ffffff; 
-                        max-width: 95%; 
-                        text-align: center;
-                    }}
+            .shadow-box {{
+                border-radius: 15px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+                margin: 20px auto; 
+                padding: 20px;
+                background-color: #ffffff; 
+                max-width: 95%; 
+                text-align: center;
+            }}
 
-                    .shadow-box img {{
-                        width: 100%; /* Adjust image size */
-                        margin: 0 auto;
-                    }}
+            .shadow-box img {{
+                width: 100%; /* Adjust image size */
+                margin: 0 auto;
+            }}
+
+            /* Modify the font size of the mermaid diagram */
+            .mermaid {{
+                font-size: {font_size}; /* Set the font size here */
+            }}
             
         </style>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js"></script>
@@ -163,6 +165,8 @@ def render_mermaid(mermaid_code, height=400):
     components.html(mermaid_html, height=height)
 
 
+
+
 # Function to load specific items from the markdown file
 def parse_markdown_sections(file_path):
     """
@@ -177,7 +181,7 @@ def parse_markdown_sections(file_path):
     current_content = []
 
     for line in content.splitlines():
-        if line.startswith("###"):  # Found a section header
+        if line.startswith("###"):  
             if current_section:
                 sections[current_section] = "\n".join(current_content)
             current_section = line.strip()
@@ -190,6 +194,27 @@ def parse_markdown_sections(file_path):
         sections[current_section] = "\n".join(current_content)
 
     return sections
+
+def render_shadow_box(content, flex_direction="row", font_size="18px"):
+    st.markdown(
+        f"""
+        <div style="
+            border-radius: 15px; 
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); 
+            margin: 20px auto; 
+            padding: 20px; 
+            background-color: #ffffff; 
+            max-width: 95%; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: {flex_direction};
+            font-size: {font_size};">
+            {content}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 # Initialize session state for video control
 if "play_videos" not in st.session_state:
@@ -236,14 +261,15 @@ tabs = st.tabs(["Introduction", "Training", "Simulation","Conclusions"])
 with tabs[0]:
     markdown_file = "latex/intro.md"
 
-    # Parse the markdown file into sections
     sections = parse_markdown_sections(markdown_file)
+    print(sections)
     st.markdown("#### 1. Project Description")
-    st.markdown(sections["### 1. Project Description"])
+    
     st.markdown("##### Ojective:")
-    st.markdown(sections["#### Ojective:"])
+    render_shadow_box(sections["#### Ojective:"])
+    
     st.markdown("##### Focus On:")
-    st.markdown(sections["#### Focus On:"])
+    render_shadow_box(sections["#### Focus On:"],flex_direction="column")
 
     st.markdown("#### 2.Goals of the Simulation Project:")
     render_mermaid(simulation_goals_code,300)
@@ -251,26 +277,26 @@ with tabs[0]:
     col1,col2=st.columns(2)
     with col1:
         st.markdown("#### 3.Models of Decision Support Considered:")
-        st.markdown(sections["### 3.Models of Decision Support Considered"])
+        render_shadow_box(sections["### 3.Models of Decision Support Considered"],flex_direction="row")
 
     with col2:
         st.markdown("#### 4. Model Characteristics:")
-        st.markdown(sections["### 4. Model Characteristics:"])
+        render_shadow_box(sections["### 4. Model Characteristics:"],flex_direction="row")
 
     st.markdown("#### 5.Main Entities of the System:")
-    render_mermaid(system_representation,500)
+    render_mermaid(system_representation, height=500, font_size="24px")
 
     st.markdown("#### 6.System Variables:")
-    render_mermaid(system_variables_code,500)
+    render_mermaid(system_variables_code, height=500)
 
     st.markdown("#### 7.Operation Policy:")
-    render_mermaid(operation_policy,400)
+    render_mermaid(operation_policy, height=400,font_size="24px")
 
     st.markdown("#### 8.Experimental Scenarios:")
-    render_mermaid(system_code_scenarios,300)
+    render_mermaid(system_code_scenarios, height=300)
 
     st.markdown("#### 9.Performance Metrics:")
-    render_mermaid(system_code_metrics,250)
+    render_mermaid(system_code_metrics, height=250)
 
 
 
@@ -279,11 +305,9 @@ with tabs[1]:
     st.markdown("##### Training Process - Sequential Diagram:")
    
     try:
-        # Load and display the PNG image
         image = Image.open("images/Training_Process.png")
         
-        # Resize the image (optional, you can adjust the size)
-        image = image.resize((600, 400))  # Resize image to 600x400 pixels, adjust as needed
+        image = image.resize((600, 400)) 
         
         # Save the image to a BytesIO buffer to get the base64 string for embedding
         buffer = io.BytesIO()
@@ -411,6 +435,78 @@ with tabs[1]:
         st.markdown(f'<div class=image-container style="text-align: center;">{svg_plot}</div>', unsafe_allow_html=True)
 
 
+    #Social Attention TRAIN
+    latex_file_path = "latex/social_attention_algorithm.tex" 
+    latex_arrays = load_latex_arrays(latex_file_path)
+
+    col1,col2,col3 =st.columns(3)
+    with col1: 
+        display_order = [0] 
+        for index in display_order:
+            if index < len(latex_arrays):
+                try:
+                    st.latex(latex_arrays[index])
+                except Exception as e:
+                    st.error(f"Error rendering LaTeX at index {index}: {str(e)}")
+            else:
+                st.error(f"Invalid index: {index}. Only {len(latex_arrays)} LaTeX arrays are available.")
+
+    with col2: 
+        display_order = [1] 
+        for index in display_order:
+            if index < len(latex_arrays):
+                try:
+                    st.latex(latex_arrays[index])
+                except Exception as e:
+                    st.error(f"Error rendering LaTeX at index {index}: {str(e)}")
+            else:
+                st.error(f"Invalid index: {index}. Only {len(latex_arrays)} LaTeX arrays are available.")
+    with col3:
+        display_order = [2] 
+        for index in display_order:
+            if index < len(latex_arrays):
+                try:
+                    st.latex(latex_arrays[index])
+                except Exception as e:
+                    st.error(f"Error rendering LaTeX at index {index}: {str(e)}")
+            else:
+                st.error(f"Invalid index: {index}. Only {len(latex_arrays)} LaTeX arrays are available.")
+
+
+    [col1] =st.columns(1)
+    col1.markdown(f'<div style="text-align: left;"><b>DQN Social Attention Train:</b></div>', unsafe_allow_html=True)
+
+    col1, col2, col3,col4= st.columns(4)
+
+    with col2:
+       
+        svg_plot = load_svg_file("images/social_episode_totalreward.svg")
+
+        st.markdown(f'<div style="text-align: center;">Average Episode Reward:</div>', unsafe_allow_html=True)
+
+        st.markdown(f'<div class=image-container style="text-align: center;">{svg_plot}</div>', unsafe_allow_html=True)
+
+    
+    with col3:
+        png_image = Image.open("images/social_episode_reward3d.png")
+        png_image = png_image.resize((600, 365))
+        
+        buffer = io.BytesIO()
+        png_image.save(buffer, format="PNG")
+        buffer.seek(0)
+        
+        st.markdown(f'<div style="text-align: center;">Average Episode Reward (3D View):</div>', unsafe_allow_html=True)
+        
+        st.markdown(
+            f'<div class=image-container style="text-align: center;"><img src="data:image/png;base64,{base64.b64encode(buffer.read()).decode()}" width="600"></div>',
+            unsafe_allow_html=True
+        )
+
+
+
+
+
+
     #PPO TRAIN
     latex_file_path = "latex/ppo_algorithm.tex" 
     latex_arrays = load_latex_arrays(latex_file_path)
@@ -481,55 +577,7 @@ with tabs[1]:
         st.markdown(f'<div class=image-container style="text-align: center;">{svg_plot}</div>', unsafe_allow_html=True)
 
 
-    #Social Attention TRAIN
-    latex_file_path = "latex/social_attention_algorithm.tex" 
-    latex_arrays = load_latex_arrays(latex_file_path)
-
-    col1,col2 =st.columns(2)
-    with col1: 
-        display_order = [0] 
-        for index in display_order:
-            if index < len(latex_arrays):
-                try:
-                    st.latex(latex_arrays[index])
-                except Exception as e:
-                    st.error(f"Error rendering LaTeX at index {index}: {str(e)}")
-            else:
-                st.error(f"Invalid index: {index}. Only {len(latex_arrays)} LaTeX arrays are available.")
-
-
-    [col1] =st.columns(1)
-    col1.markdown(f'<div style="text-align: left;"><b>DQN Social Attention Train:</b></div>', unsafe_allow_html=True)
-
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-       
-        svg_plot = load_svg_file("images/social_episode_totalreward.svg")
-
-        st.markdown(f'<div style="text-align: center;">Average Episode Reward:</div>', unsafe_allow_html=True)
-
-        st.markdown(f'<div class=image-container style="text-align: center;">{svg_plot}</div>', unsafe_allow_html=True)
-
     
-    with col2:
-        # Load and resize the PNG image
-        png_image = Image.open("images/social_episode_reward3d.png")
-        png_image = png_image.resize((600, 365))
-        
-        # Save the image to a BytesIO buffer
-        buffer = io.BytesIO()
-        png_image.save(buffer, format="PNG")
-        buffer.seek(0)
-        
-        st.markdown(f'<div style="text-align: center;">Average Episode Reward (3D View):</div>', unsafe_allow_html=True)
-        
-        st.markdown(
-            f'<div class=image-container style="text-align: center;"><img src="data:image/png;base64,{base64.b64encode(buffer.read()).decode()}" width="600"></div>',
-            unsafe_allow_html=True
-        )
-
-
 
 # Third tab: Simulation
 with tabs[2]:

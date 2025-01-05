@@ -283,13 +283,11 @@ system_code_metrics = """
 flowchart TD
     subgraph H[Performance Metrics]
         I[Efficiency]
-        I1[Average wait time]
         I2[Throughput]
         I3[Average speed]
 
         J[Safety]
         J1[Collision rates]
-        J2[Near-misses]
         J3[Compliance with traffic rules]
 
         K[Adaptability]
@@ -297,11 +295,9 @@ flowchart TD
         K2[Adaptability to new traffic scenarios]
 
         %% Linking Metrics to Details
-        I --> I1
         I --> I2
         I --> I3
         J --> J1
-        J --> J2
         J --> J3
         K --> K1
         K --> K2

@@ -1,39 +1,40 @@
 \begin{array}{l}
-    \textbf{3. DQN Social Attention} \\
+    \textbf{DQN Social Attention} \\
     \scriptsize
-    \text{The attention mechanism utilizes multiple heads to compute context-sensitive embeddings, allowing the model to} \\
+    \text{The attention mechanism utilizes multiple heads to compute} \\
     \scriptsize
-    \text{attend to different aspects of the input simultaneously. Each head processes the embeddings independently and} \\
+    \text{context-sensitive embeddings, allowing the model to} \\
     \scriptsize
-    \text{outputs its own context-aware representation. The outputs from all heads are concatenated and projected to form} \\
+    \text{attend to different aspects of the input simultaneously}. \\
     \scriptsize
-    \text{the final embedding. The attention computation for each head is given by:} \\
+    \text{Each head processes the embeddings independently and} \\
+    \scriptsize
+    \text{outputs its own context-aware representation.} \\
+    \scriptsize
+    \text{The outputs from all heads are concatenated and projected to form the final embedding.} \\
+\end{array}
+
+\begin{array}{l}
+    \scriptsize
+    \text{The attention computation for each head is given by:} \\
     \small
     \text{output} = \sigma \left( \frac{Q K^T}{\sqrt{d_k}} \right) V \\
+\end{array}
+\begin{array}{l}
     \scriptsize
     \text{where:} \\
     \scriptsize
     Q = L_q(e_0), \; K = L_k(e_i), \; V = L_v(e_i) \\
-    \scriptsize
+    \tiny
     \text{- } e_i \text{ denotes the encoded state of vehicle } i, \text{ while } e_0 \text{ corresponds to the ego-vehicle.} \\
-    \scriptsize
+    \tiny
     \text{- } K \text{ (keys) represents descriptive features of surrounding vehicles.} \\
-    \scriptsize
+    \tiny
     \text{- } V \text{ (values) contains the embedded features used to compute the final output.} \\
-    \scriptsize
+    \tiny
     \text{- } L_q, \, L_k, \, L_v \text{ are shared linear projections applied to all vehicles' embeddings.} \\
-    \scriptsize
+    \tiny
     \text{- } \sigma \text{ is the softmax activation, normalizing attention scores across all vehicles.} \\
-    \scriptsize
+    \tiny
     \text{- } d_k \text{ represents the dimension of the key embeddings.} \\
-    \scriptsize
-    \text{The ego-vehicle query } Q \text{ interacts with keys } K \text{ to compute attention weights, prioritizing vehicles } \\
-    \scriptsize
-    \text{that are most relevant to the ego-vehicle's current context. This results in a weighted combination of values } V. \\
-    \scriptsize
-    \text{The outputs from each head are aggregated and passed through a linear layer to produce the final representation.} \\
-    \scriptsize
-    \text{The entire process is permutation-invariant, ensuring robust handling of varying numbers and orders of vehicles.} \\
-    \scriptsize
-    \text{The final result is a dot product of values and key-similarities, capturing the most relevant contextual information.} \\
 \end{array}

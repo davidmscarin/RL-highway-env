@@ -1,11 +1,10 @@
 ### 1. Project Description
 
 #### Ojective:
- To simulate and evaluate reinforcement learning algorithms that enable autonomous vehicles to perform complex driving tasks while ensuring safety and optimizing traffic flow. 
-#### Focus On:
-**Road Intersection** simulation scenarios, using an agent-based simulation framework ***Highway-Env***, at  where multiple autonomous vehicles, trained with different Deep Reinforcement Learning (DRL) policies, must determine the order of crossing and appropriate speeds, aiming to **maximize traffic efficiency and minimize collision risks**.  
+ <div>To simulate and evaluate <b>Reinforcement Learning  Algorithms</b> that enable autonomous vehicles to perform complex driving tasks while ensuring safety and optimizing traffic flow.</div>
 
-The agents will be tested under various combinations of environmental variables (e.g., traffic density vehicle speed) to evaluate their behavior and decision-making processes in real-time.  
+#### Focus On:
+<div><b>Road Intersection simulation scenarios</b>, using an agent-based simulation framework <b>Highway-Env</b>, at  where multiple autonomous vehicles, trained with different <b>Deep Reinforcement Learning (DRL) algorithms and policies</b>, must determine the order of crossing and appropriate speeds, aiming to maximize traffic efficiency and minimize collision risks.</div>
 
 
 ### 2.Goals of the Simulation Project
@@ -22,21 +21,10 @@ The agents will be tested under various combinations of environmental variables 
 
       
 ### 3.Models of Decision Support Considered
-
-> **Descriptive**
-
-> **Predictive**
-
-> **Prescriptive**
-
+<h5>Descriptive </h5><h5>Predictive</h5><h5>Prescriptive</h5><h5>Normative</h5>
 
 ### 4. Model Characteristics:
-
-> **Dynamic**
-      
-> **Stochastic**
-      
-> **Discrete**
+<h5>Dynamic</h5> <h5>Stochastic</h5><h5>Discrete</h5>
       
 
 ### 5.Main Entities of the System
