@@ -282,7 +282,7 @@ In a multi-agent setting, an agent’s state at time $t$, $s_t$, may include not
 \[
 s_t = \{s_i(t), s_{-i}(t)\}
 \]
-where $s_{-i}(t)$ represents the states of all other agents in the environment at time $t$\cite{mnih2015human}.
+where $s_{-i}(t)$ represents the states of all other agents in the environment at time $t$\cite{mnih2015dqn}.
 
 \paragraph{Social Attention Weights} 
 A key idea in social attention is to compute attention weights that determine how much focus an agent should place on each neighboring agent. Let $\alpha_i$ be the attention weight for agent $i$. These weights are learned through a neural network that estimates the importance of each neighboring agent's state in the context of the decision-making process. A common approach is to use a weighted sum, where each agent’s state is weighted according to its relevance:
@@ -365,12 +365,6 @@ The following Key Performance Indicators (KPIs) and decision criteria will be us
     \begin{itemize}
         \item \textbf{Metric:} Collision rate (Average number of collisions per test episode)
         \item This is a crucial indicator of how safe the intersection is for autonomous vehicles. Reducing collisions is a primary goal for any traffic management system.
-    \end{itemize}
-    
-    \item \textbf{Travel Time through the Intersection}
-    \begin{itemize}
-        \item \textbf{Metric:} Average travel time per vehicle (seconds)
-        \item Evaluating the time it takes for vehicles to cross the intersection helps assess the effectiveness of different policies in facilitating movement.
     \end{itemize}
     
     \item \textbf{Adaptability to Varying Traffic Conditions}

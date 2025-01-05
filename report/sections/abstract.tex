@@ -1,1 +1,27 @@
-Abstract
+
+This project focuses on simulating scenarios at road intersections where autonomous vehicles must collaboratively determine crossing orders and adjust 
+speeds to maximize traffic efficiency while minimizing collision risks.
+
+Using the Highway Env simulation framework, a Multi-Agent System (MAS) was developed, 
+consisting of groups of four agents, each trained with distinct Deep Reinforcement Learning (DRL) policies. 
+These agents were tested under various traffic conditions and environmental variables, such as varying traffic density, to evaluate their 
+real-time decision-making and adaptability.
+
+The research successfully trained the agents using DRL algorithms, including DQN and PPO, 
+enabling them to optimize intersection navigation by enhancing safety and improving traffic flow.
+
+Agent behavior was compared across four distinct policies: (1) a Baseline No Policy, serving as a control; (2) \textit{MlpPolicy}, which uses 
+a multi-layer perceptron to process environmental features such as speed, vehicle distance, and intersection layout; 
+(3) \textit{CnnPolicy}, which employs convolutional neural networks to interpret visual and spatial data, allowing for informed decision-making 
+based on grid representations of intersections; 
+and (4) \textit{Social Attention Mechanisms Policy}, which incorporates social attention to improve cooperation and coordination 
+by interpreting the behaviors and intentions of nearby agents. 
+Each policy was evaluated in terms of efficiency (e.g., throughput) and safety (e.g., collision rates) and adaptability to unseen environment conditions,  providing insights into their respective 
+decision-making capabilities.
+
+During the evaluation phase, agents trained with DQN and Social Attention Mechanisms demonstrated superior adaptability, particularly in 
+dense traffic scenarios where metrics such as collision rates and episode lengths were critical indicators of performance. 
+Conversely, certain combinations of algorithms and policies struggled under complex conditions, highlighting limitations in scalability and robustness.
+
+The findings underscored the varying strengths of the algorithms in terms of efficiency, safety, and adaptability, offering a clear 
+classification of their performance.

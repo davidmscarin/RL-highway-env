@@ -367,7 +367,7 @@ Which produces an observation array similar to the one represented in the table 
 
 \subsubsection{DQN with Social Attention}
 
-Configuration/Implementation based off \textit{rl-agents} GitHub Repository \cite{rl-agents}.
+Configuration/Implementation based off \textit{rl-agents} GitHub Repository\cite{rl-agents}.
 \subsubsection{1.Initialization}
 
 Environment Setup, Observation Space (JSON encoded): 
@@ -456,7 +456,7 @@ From this, we get the temporal difference error, $\delta$, which is what we atte
 \delta = Q(s, a) - \left(r + \gamma \max_{a'} Q(s', a')\right)
 \]
 
-The training pipeline for this approach follows closely \cite{pytorch_rl_tutorial}. Each agent is represented by its own policy network and target network. We select actions according to an epsilon greedy policy, using Replay Memory to store transitions of the type \textit{(State, Action, Next State, Reward}. By obtaining a batch of these transitions for each autonomous agent, we optimize the network by minimizing the \textit{Huber Loss} calculated with respect to the previously mentioned $delta$:
+The training pipeline for this approach follows closely \cite{pytorchrltutorial}. Each agent is represented by its own policy network and target network. We select actions according to an epsilon greedy policy, using Replay Memory to store transitions of the type \textit{(State, Action, Next State, Reward}. By obtaining a batch of these transitions for each autonomous agent, we optimize the network by minimizing the \textit{Huber Loss} calculated with respect to the previously mentioned $delta$:
 
 \[
 L = \frac{1}{|B|} \sum_{(s, a, s', r) \in B} L(\delta),
@@ -481,12 +481,7 @@ Having succesfully achieve decentralized training, the next step would be to imp
     \label{fig:social influence}
 \end{figure}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.5]{images/dqn_SI_metrics.png}
-    \caption{Chain of social influence}
-    \label{fig:social influence}
-\end{figure}
+
 
 \subsection{Practical Training Implementation - Execution and Results}
 
@@ -509,7 +504,6 @@ Below are the logs of these processes:
     \includegraphics[height=0.20\textheight]{images/dqn_cnn.png} 
     \caption{DQN with CnnPolicy training Log - Average Reward and Train Loss Evolution}
 \end{figure}
-
 
 
 2. DQN with MlpPolicy
@@ -546,6 +540,17 @@ Below are the logs of these processes:
     \centering
     \includegraphics[height=0.20\textheight]{images/ppo_mlp.png} 
     \caption{PPO with MlpPolicy training Log - Average Reward and Train Loss Evolution}
+\end{figure}
+
+
+Decentralized Social Influence DQN
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.5]{images/dqn_SI_metrics.png}
+    \caption{Social Influence Train Logs}
+    \label{fig:social influence}
 \end{figure}
 
 

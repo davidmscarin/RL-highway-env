@@ -2362,18 +2362,29 @@
   </bcf:bibdata>
   <bcf:section number="0">
     <bcf:citekey order="1" intorder="1">highwayenv</bcf:citekey>
-    <bcf:citekey order="2" intorder="1">mnih2015dqn</bcf:citekey>
-    <bcf:citekey order="3" intorder="1">schulman2017ppo</bcf:citekey>
-    <bcf:citekey order="4" intorder="1">sutton2018reinforcement</bcf:citekey>
-    <bcf:citekey order="5" intorder="1">vaswani2017attention</bcf:citekey>
-    <bcf:citekey order="6" intorder="1">jiang2018learning</bcf:citekey>
-    <bcf:citekey order="7" intorder="1">mnih2015human</bcf:citekey>
-    <bcf:citekey order="8" intorder="1">DBLP</bcf:citekey>
-    <bcf:citekey order="9" intorder="1">vaswani2017attention</bcf:citekey>
-    <bcf:citekey order="10" intorder="1">stable-baselines3</bcf:citekey>
-    <bcf:citekey order="11" intorder="1">rl-agents</bcf:citekey>
-    <bcf:citekey order="12" intorder="1">pytorch_rl_tutorial</bcf:citekey>
-    <bcf:citekey order="13" intorder="1">jaques2019social</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">rl-agents</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">leurent2019socialattention</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">highwaymultiagentenv</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">wei2019intellilight</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">yang2018meanfield</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">chu2019multiagent</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">kiran2021survey</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">chen2021collisionavoidance</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">wang2020multiintersection</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">baker2020emergent</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">thananjeyan2021</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">mnih2015dqn</bcf:citekey>
+    <bcf:citekey order="14" intorder="1">schulman2017ppo</bcf:citekey>
+    <bcf:citekey order="15" intorder="1">sutton2018reinforcement</bcf:citekey>
+    <bcf:citekey order="16" intorder="1">vaswani2017attention</bcf:citekey>
+    <bcf:citekey order="17" intorder="1">jiang2018learning</bcf:citekey>
+    <bcf:citekey order="18" intorder="1">mnih2015dqn</bcf:citekey>
+    <bcf:citekey order="19" intorder="1">DBLP</bcf:citekey>
+    <bcf:citekey order="20" intorder="1">vaswani2017attention</bcf:citekey>
+    <bcf:citekey order="21" intorder="1">stable-baselines3</bcf:citekey>
+    <bcf:citekey order="22" intorder="1">rl-agents</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">pytorchrltutorial</bcf:citekey>
+    <bcf:citekey order="24" intorder="1">jaques2019social</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
