@@ -52,16 +52,14 @@
 \contentsline {section}{\numberline {4.4}Evaluate system scalability and robustness}{27}{section.4.4}%
 \contentsline {subsection}{\numberline {4.4.1}Metrics Description}{27}{subsection.4.4.1}%
 \contentsline {subsection}{\numberline {4.4.2}Metrics Collection}{28}{subsection.4.4.2}%
-\contentsline {chapter}{\numberline {5}Results and Discussion}{31}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Results and Discussion}{31}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Average Episode Length}{33}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Global Average Speed}{33}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Average Arrivals per Episode and Average Collisions per Episode}{34}{subsection.5.1.3}%
-\contentsline {section}{\numberline {5.2}Performance Classification of Algorithms/Policies}{36}{section.5.2}%
-\contentsline {subsubsection}{Efficiency}{36}{subsubsection*.32}%
-\contentsline {subsubsection}{Safety}{36}{subsubsection*.33}%
-\contentsline {subsubsection}{Adaptability}{37}{subsubsection*.34}%
-\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{38}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Conclusions}{38}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Future Work}{38}{section.6.2}%
-\contentsline {chapter}{\numberline {A}Appendix: Deploying the App}{42}{appendix.A}%
+\contentsline {subsection}{\numberline {4.4.3}Performance Indicators}{31}{subsection.4.4.3}%
+\contentsline {subsubsection}{Traffic Flow Efficiency}{31}{subsubsection*.32}%
+\contentsline {subsubsection}{Safety Indicators}{31}{subsubsection*.33}%
+\contentsline {subsubsection}{Adaptability to Varying Traffic Conditions}{31}{subsubsection*.34}%
+\contentsline {chapter}{\numberline {5}Results and Discussion}{33}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Results and Discussion}{33}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Performance Indicators and Algorithms Classification}{36}{subsection.5.1.1}%
+\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{39}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusions}{39}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Future Work}{39}{section.6.2}%
+\contentsline {chapter}{\numberline {A}Appendix: Deploying the App}{43}{appendix.A}%

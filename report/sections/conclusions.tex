@@ -1,14 +1,23 @@
 \section{Conclusions}
 
-This project has successfully developed and evaluated a robust and adaptable Multi-Agent System (MAS) for managing autonomous vehicles at road intersections. The primary objectives of the project were to train agents using Deep Reinforcement Learning (DRL) algorithms, evaluate their performance under various traffic conditions, and assess the scalability and robustness of the system.
+This project has successfully developed and evaluated a robust Multi-Agent System (MAS) for managing autonomous vehicles at road intersections. The primary objectives were to train agents using Deep Reinforcement Learning (DRL) algorithms, assess their performance under various traffic conditions, and evaluate the system's scalability and robustness.
 
-In the first phase, the agents were trained using a set of DRL algorithms, such as DQN and PPO, to enable autonomous decision-making regarding intersection crossing orders and speed control. The goal was to optimize traffic flow while ensuring that the agents avoid collisions. The training phase was successful, with agents demonstrating the ability to navigate the intersection effectively, adjust their speeds, and follow traffic rules.
+In the first phase, agents were trained using DRL algorithms such as DQN and PPO to enable autonomous decision-making for intersection crossing orders and speed control. The goal was to optimize traffic flow while ensuring safe navigation and collision avoidance. The training phase was successful, with the agents effectively adjusting their speeds, following traffic rules, and navigating the intersection.
 
-In the second phase, the impact of different traffic flow configurations (sparse and dense traffic) on the agents' performance was explored. The evaluation revealed that some algorithms, particularly DQN with Social Attention, demonstrated superior adaptability to the varying traffic densities. In dense traffic scenarios, some algorithms exhibited challenges in maintaining safety and efficiency, leading to higher collision rates and shorter episode lengths.
+The second phase examined the agents' performance under different traffic densities, including sparse and dense traffic. The evaluation revealed that certain algorithms, particularly DQN with Social Attention, demonstrated superior adaptability to varying traffic conditions. In dense traffic scenarios, some algorithms faced challenges in maintaining safety and efficiency, leading to higher collision rates and reduced performance in terms of speed and collision avoidance.
 
-The third phase of the project focused on evaluating the system's scalability and robustness. The metrics collected during this phase provided valuable insights into how different algorithms perform across multiple simulations with varying environmental conditions. The results showed that while some algorithms like DQN with Social Attention excelled in both efficiency and safety, others, such as PPO, struggled with adaptability under varying traffic conditions.
+The third phase of the project focused on the scalability and robustness of the system. The collected performance metrics provided valuable insights into how the different algorithms fared across multiple simulations under various environmental conditions. The results showed that while algorithms like DQN with Social Attention excelled in efficiency and safety, others, such as PPO, struggled with adaptability in dense traffic scenarios.
 
-Overall, the project successfully achieved its objectives by training autonomous agents, evaluating their performance in different environments, and analyzing the scalability and robustness of the system. The classification of algorithms into performance categories such as efficiency, safety, and adaptability provides a clear understanding of each algorithm's strengths and weaknesses.
+Overall, the project achieved its objectives by successfully training autonomous agents, evaluating their performance under diverse traffic conditions, and analyzing the system's scalability and robustness. The classification of the algorithms into performance categories such as efficiency, safety, and adaptability provides a clear understanding of their strengths and weaknesses. Based on these findings:
+
+\begin{itemize}
+    \item \textbf{Efficiency:} The DQN algorithm with the Social Attention policy is classified as \textit{High}, indicating exceptional performance in efficiency. DQN with CNN and PPO with CNN are classified as \textit{Medium}, while DQN with MLP and PPO with MLP are categorized as \textit{Low}, reflecting their subpar efficiency.
+    
+    \item \textbf{Safety:} The DQN with CNN policy excels in safety with a \textit{High} classification. Conversely, DQN with Social Attention and PPO with MLP fall into the \textit{Low} safety category. PPO with CNN and DQN with MLP show \textit{Medium} safety performance, indicating an average level of safety.
+    
+    \item \textbf{Adaptability:} Both the Baseline and PPO with MLP algorithms are classified as \textit{High} in adaptability, demonstrating strong performance in varying traffic conditions. DQN with CNN, PPO with CNN, and DQN with MLP are rated as \textit{Medium}, while DQN with Social Attention is ranked \textit{Low} in adaptability.
+\end{itemize}
+
 
 \section{Future Work}
 

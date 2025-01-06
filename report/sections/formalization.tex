@@ -321,9 +321,6 @@ The ego-vehicle query $Q$ interacts with keys $K$ to compute attention weights, 
 
     This approach helps agents develop cooperative strategies and optimize their interactions with other vehicles. 
     The attention architecture was introduced to enable neural networks to discover inter-dependencies within a variable number of inputs\cite{vaswani2017attention}.
-
-
-
     
     \textbf{Scenario}: Agents utilizing this policy will actively monitor the behavior of surrounding vehicles, adapting their actions based on predicted movements and intentions of others.
 
@@ -335,7 +332,7 @@ The ego-vehicle query $Q$ interacts with keys $K$ to compute attention weights, 
 \section{Testing Framework for Operation Policies (Scenarios)}
 
 \begin{enumerate}
-    \item \textbf{Experimental Scenarios:} Each policy will be tested under various conditions, such as:
+    \item \textbf{Experimental Scenarios:} Each combination RL Algorithm/Policy  will be tested under various conditions, such as:
     \begin{itemize}
         \item \textbf{High Traffic Density:} Increased number of vehicles entering the intersection simultaneously.
         \item \textbf{Low Traffic Density:} Sparse vehicle presence to evaluate agent behavior in less congested environments.
@@ -343,9 +340,10 @@ The ego-vehicle query $Q$ interacts with keys $K$ to compute attention weights, 
     \item \textbf{Group Configuration:} Each group, consisting of four agents using the same policy, will be tested in each scenario. This allows for direct comparisons between the different policies under identical traffic conditions.
     \item \textbf{Performance Metrics:}
     \begin{enumerate}
-        \item \textbf{Efficiency:} Metrics such as throughput (vehicles per time unit), and average speed of agents.
-        \item \textbf{Safety:} Collision rates, near-misses, and compliance with traffic rules.
-        \item \textbf{Adaptability:} How well agents generalize their learned behaviors to new traffic scenarios (e.g., changes in traffic density, lane configurations).
+        \item \textbf{Average Episode Length:} The mean number of steps (time steps) per episode.
+        \item \textbf{Average Speed:} The overall average speed of all agents across all episodes.
+        \item \textbf{Average Arrivals per Episode:} The mean number of vehicles that successfully arrived at their destinations per episode.
+        \item \textbf{Average Collisions per Episode:} The mean number of collisions that occurred per episode.
     \end{enumerate}
 \end{enumerate}
 

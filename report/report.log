@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.10.23)  5 JAN 2025 11:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.10.23)  6 JAN 2025 03:27
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -841,7 +841,7 @@ Chapter 3.
 (./sections/formalization.tex [5
 
 ] [6]
-<images/variables.png, id=246, 1173.38374pt x 436.63126pt>
+<images/variables.png, id=236, 1173.38374pt x 436.63126pt>
 File: images/variables.png Graphic file (type png)
 <use images/variables.png>
 Package pdftex.def Info: images/variables.png  used on input line 144.
@@ -859,7 +859,7 @@ l.155
        <./images/variables.png>] [8] [9] [10] [11{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]) [12]
 Chapter 4.
 (./sections/methodology.tex
-<images/goals.png, id=333, 1285.80376pt x 214.8025pt>
+<images/goals.png, id=324, 1285.80376pt x 214.8025pt>
 File: images/goals.png Graphic file (type png)
 <use images/goals.png>
 Package pdftex.def Info: images/goals.png  used on input line 8.
@@ -869,7 +869,7 @@ Overfull \hbox (50.20047pt too wide) in paragraph at lines 8--9
  [][] 
  []
 
-<images/train.png, id=334, 507.8975pt x 336.25626pt>
+<images/train.png, id=325, 507.8975pt x 336.25626pt>
 File: images/train.png Graphic file (type png)
 <use images/train.png>
 Package pdftex.def Info: images/train.png  used on input line 42.
@@ -894,17 +894,17 @@ pdfTeX warning (ext4): destination with the same identifier (name{table.4.1}) ha
                                                   \__shipout_drop_firstpage_...
 l.346         verbose=
                       2,] [19] [20]
-<images/social_influence.png, id=581, 116.435pt x 200.75pt>
+<images/social_influence.png, id=572, 116.435pt x 200.75pt>
 File: images/social_influence.png Graphic file (type png)
 <use images/social_influence.png>
 Package pdftex.def Info: images/social_influence.png  used on input line 479.
 (pdftex.def)             Requested size: 58.21735pt x 100.37474pt.
-<images/dqn_cnn.png, id=582, 471.32608pt x 153.96652pt>
+<images/dqn_cnn.png, id=573, 471.32608pt x 153.96652pt>
 File: images/dqn_cnn.png Graphic file (type png)
 <use images/dqn_cnn.png>
 Package pdftex.def Info: images/dqn_cnn.png  used on input line 504.
 (pdftex.def)             Requested size: 428.90741pt x 140.09923pt.
-<images/dqn_mlp.png, id=583, 478.39598pt x 157.10869pt>
+<images/dqn_mlp.png, id=574, 478.39598pt x 157.10869pt>
 File: images/dqn_mlp.png Graphic file (type png)
 <use images/dqn_mlp.png>
 Package pdftex.def Info: images/dqn_mlp.png  used on input line 513.
@@ -920,17 +920,17 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.4}) h
                                                   \__shipout_drop_firstpage_...
 l.515 \end{figure}
                    <./images/social_influence.png> <./images/dqn_cnn.png>]
-<images/dqn_sa.png, id=594, 482.30188pt x 169.13188pt>
+<images/dqn_sa.png, id=585, 482.30188pt x 169.13188pt>
 File: images/dqn_sa.png Graphic file (type png)
 <use images/dqn_sa.png>
 Package pdftex.def Info: images/dqn_sa.png  used on input line 521.
 (pdftex.def)             Requested size: 399.52301pt x 140.09923pt.
-<images/ppo_cnn.png, id=595, 477.61043pt x 152.39543pt>
+<images/ppo_cnn.png, id=586, 477.61043pt x 152.39543pt>
 File: images/ppo_cnn.png Graphic file (type png)
 <use images/ppo_cnn.png>
 Package pdftex.def Info: images/ppo_cnn.png  used on input line 531.
 (pdftex.def)             Requested size: 439.08626pt x 140.09923pt.
-<images/ppo_mlp.png, id=596, 469.755pt x 153.96652pt>
+<images/ppo_mlp.png, id=587, 469.755pt x 153.96652pt>
 File: images/ppo_mlp.png Graphic file (type png)
 <use images/ppo_mlp.png>
 Package pdftex.def Info: images/ppo_mlp.png  used on input line 541.
@@ -951,7 +951,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.7}) h
                                                   \__shipout_drop_firstpage_...
 l.544 
        <./images/dqn_mlp.png> <./images/dqn_sa.png> <./images/ppo_cnn.png>]
-<images/dqn_SI_metrics.png, id=608, 799.98875pt x 435.6275pt>
+<images/dqn_SI_metrics.png, id=599, 799.98875pt x 435.6275pt>
 File: images/dqn_SI_metrics.png Graphic file (type png)
 <use images/dqn_SI_metrics.png>
 Package pdftex.def Info: images/dqn_SI_metrics.png  used on input line 551.
@@ -967,7 +967,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.9}) h
                                                   \__shipout_drop_firstpage_...
 l.576 
        <./images/ppo_mlp.png> <./images/dqn_SI_metrics.png>]
-<images/app_intro.png, id=617, 1847.90375pt x 947.54pt>
+<images/app_intro.png, id=608, 1847.90375pt x 947.54pt>
 File: images/app_intro.png Graphic file (type png)
 <use images/app_intro.png>
 Package pdftex.def Info: images/app_intro.png  used on input line 579.
@@ -983,7 +983,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.10}) 
                                                   \__shipout_drop_firstpage_...
 l.617     \end{itemize}
                         <./images/app_intro.png>]
-<images/app_train.png, id=626, 1847.90375pt x 947.54pt>
+<images/app_train.png, id=617, 1847.90375pt x 947.54pt>
 File: images/app_train.png Graphic file (type png)
 <use images/app_train.png>
 Package pdftex.def Info: images/app_train.png  used on input line 641.
@@ -993,7 +993,7 @@ Overfull \hbox (25.16362pt too wide) in paragraph at lines 641--642
  [][] 
  []
 
-<images/app_simulation.png, id=627, 1830.84pt x 983.675pt>
+<images/app_simulation.png, id=618, 1830.84pt x 983.675pt>
 File: images/app_simulation.png Graphic file (type png)
 <use images/app_simulation.png>
 Package pdftex.def Info: images/app_simulation.png  used on input line 652.
@@ -1009,7 +1009,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.4.11}) 
                                                   \__shipout_drop_firstpage_...
 l.655 
        <./images/app_train.png>]
-<images/app_conclusions.png, id=634, 1830.84pt x 983.675pt>
+<images/app_conclusions.png, id=625, 1830.84pt x 983.675pt>
 File: images/app_conclusions.png Graphic file (type png)
 <use images/app_conclusions.png>
 Package pdftex.def Info: images/app_conclusions.png  used on input line 663.
@@ -1034,7 +1034,7 @@ Overfull \hbox (13.02829pt too wide) in paragraph at lines 836--836
  []\OT1/cmtt/m/n/10 global_avg_speed = total_speed_sum / total_step_count if total_step_count > 0 else 0[] 
  []
 
-<images/app_plots.png, id=663, 1407.2575pt x 803.0pt>
+<images/app_plots.png, id=654, 1407.2575pt x 803.0pt>
 File: images/app_plots.png Graphic file (type png)
 <use images/app_plots.png>
 Package pdftex.def Info: images/app_plots.png  used on input line 871.
@@ -1045,7 +1045,7 @@ Overfull \hbox (38.0765pt too wide) in paragraph at lines 871--872
  []
 
 [29]
-<images/app_global_metrics.png, id=668, 730.73pt x 433.62pt>
+<images/app_global_metrics.png, id=659, 730.73pt x 433.62pt>
 File: images/app_global_metrics.png Graphic file (type png)
 <use images/app_global_metrics.png>
 Package pdftex.def Info: images/app_global_metrics.png  used on input line 879.
@@ -1055,20 +1055,20 @@ Overfull \hbox (19.23576pt too wide) in paragraph at lines 879--880
  [][] 
  []
 
-) [30
+[30
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.14}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.103 \chapter
-              {Results and Discussion}
+l.887 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.15}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.103 \chapter
-              {Results and Discussion} <./images/app_plots.png> <./images/app_global_metrics.png>]
+l.887 
+       <./images/app_plots.png> <./images/app_global_metrics.png>] [31]) [32]
 Chapter 5.
 (./sections/results.tex
-<images/app_global_indicators.png, id=678, 943.525pt x 530.48187pt>
+<images/app_global_indicators.png, id=680, 943.525pt x 530.48187pt>
 File: images/app_global_indicators.png Graphic file (type png)
 <use images/app_global_indicators.png>
 Package pdftex.def Info: images/app_global_indicators.png  used on input line 7.
@@ -1078,12 +1078,12 @@ Overfull \hbox (70.32036pt too wide) in paragraph at lines 7--8
  [][] 
  []
 
-<images/app_global_plots_sparse1.png, id=679, 465.74pt x 223.33438pt>
+<images/app_global_plots_sparse1.png, id=681, 465.74pt x 223.33438pt>
 File: images/app_global_plots_sparse1.png Graphic file (type png)
 <use images/app_global_plots_sparse1.png>
 Package pdftex.def Info: images/app_global_plots_sparse1.png  used on input line 15.
 (pdftex.def)             Requested size: 321.38937pt x 154.11237pt.
-[31
+[33
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5.1}) has been already used, duplicate ignored
@@ -1091,22 +1091,22 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.5.1}) h
                                                   \__shipout_drop_firstpage_...
 l.17 
       <./images/app_global_indicators.png>]
-<images/app_global_plots_sparse2.png, id=686, 460.21938pt x 184.69pt>
+<images/app_global_plots_sparse2.png, id=688, 460.21938pt x 184.69pt>
 File: images/app_global_plots_sparse2.png Graphic file (type png)
 <use images/app_global_plots_sparse2.png>
 Package pdftex.def Info: images/app_global_plots_sparse2.png  used on input line 20.
 (pdftex.def)             Requested size: 331.65965pt x 133.098pt.
-<images/app_global_plots_dense1.png, id=687, 690.58pt x 333.245pt>
+<images/app_global_plots_dense1.png, id=689, 690.58pt x 333.245pt>
 File: images/app_global_plots_dense1.png Graphic file (type png)
 <use images/app_global_plots_dense1.png>
 Package pdftex.def Info: images/app_global_plots_dense1.png  used on input line 26.
 (pdftex.def)             Requested size: 312.1069pt x 150.6064pt.
-<images/app_global_plots_dense2.png, id=688, 699.61375pt x 311.1625pt>
+<images/app_global_plots_dense2.png, id=690, 699.61375pt x 311.1625pt>
 File: images/app_global_plots_dense2.png Graphic file (type png)
 <use images/app_global_plots_dense2.png>
 Package pdftex.def Info: images/app_global_plots_dense2.png  used on input line 31.
 (pdftex.def)             Requested size: 314.99408pt x 140.09923pt.
- [32
+ [34
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
@@ -1116,20 +1116,62 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.5.3}) h
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.36 
-      <./images/app_global_plots_sparse1.png> <./images/app_global_plots_sparse2.png> <./images/app_global_plots_dense1.png> <./images/app_global_plots_dense2.png>] [33] [34] [35] [36
-pdfTeX warning (ext4): destination with the same identifier (name{table.5.1}) has been already used, duplicate ignored
+      <./images/app_global_plots_sparse1.png> <./images/app_global_plots_sparse2.png> <./images/app_global_plots_dense1.png> <./images/app_global_plots_dense2.png>] [35]
+<images/app_indicators_efficiency.png, id=705, 1397.22pt x 573.14125pt>
+File: images/app_indicators_efficiency.png Graphic file (type png)
+<use images/app_indicators_efficiency.png>
+Package pdftex.def Info: images/app_indicators_efficiency.png  used on input line 85.
+(pdftex.def)             Requested size: 512.3156pt x 210.15419pt.
+
+Overfull \hbox (59.3477pt too wide) in paragraph at lines 85--86
+ [][] 
+ []
+
+<images/app_indicators_adapt.png, id=706, 1400.23125pt x 466.74374pt>
+File: images/app_indicators_adapt.png Graphic file (type png)
+<use images/app_indicators_adapt.png>
+Package pdftex.def Info: images/app_indicators_adapt.png  used on input line 113.
+(pdftex.def)             Requested size: 525.38455pt x 175.12671pt.
+
+Overfull \hbox (72.41666pt too wide) in paragraph at lines 113--114
+ [][] 
+ []
+
+[36
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.134 \begin{itemize}
-                     ]) [37]
+l.116 
+       <./images/app_indicators_efficiency.png>]
+<images/app_indicators_classif.png, id=714, 1409.265pt x 415.5525pt>
+File: images/app_indicators_classif.png Graphic file (type png)
+<use images/app_indicators_classif.png>
+Package pdftex.def Info: images/app_indicators_classif.png  used on input line 145.
+(pdftex.def)             Requested size: 522.6456pt x 154.11237pt.
+
+Overfull \hbox (69.6777pt too wide) in paragraph at lines 145--146
+ [][] 
+ []
+
+[37
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5.5}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.148 
+       <./images/app_indicators_adapt.png>]) [38
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5.6}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.106 \chapter
+              {Conclusions and Future Work} <./images/app_indicators_classif.png>]
 Chapter 6.
-(./sections/conclusions.tex [38
+(./sections/conclusions.tex [39
 
-]) [39] [40
+]) [40] [41
 
-] [41]
+] [42]
 Appendix A.
-(./sections/appendix.tex) [42
+(./sections/appendix.tex) [43
 
 ] (./report.aux)
  ***********
@@ -1141,24 +1183,24 @@ L3 programming layer <2024-01-22>
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 80539A596685F3348489F6927B0B5661;7035.
+(rerunfilecheck)             Checksum: 45999A666CAFCDBC7186F54DD2CF39B1;6488.
 Package logreq Info: Writing requests to 'report.run.xml'.
 \openout1 = `report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 23596 strings out of 474222
- 410895 string characters out of 5748732
+ 23616 strings out of 474222
+ 411694 string characters out of 5748732
  2052975 words of memory out of 5000000
- 45129 multiletter control sequences out of 15000+600000
+ 45147 multiletter control sequences out of 15000+600000
  564641 words of font info for 61 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  94i,12n,93p,1094b,2044s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on report.pdf (43 pages, 3416357 bytes).
+Output written on report.pdf (44 pages, 3550587 bytes).
 PDF statistics:
- 935 PDF objects out of 1000 (max. 8388607)
- 798 compressed objects within 8 object streams
- 378 named destinations out of 1000 (max. 500000)
- 390 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 939 PDF objects out of 1000 (max. 8388607)
+ 795 compressed objects within 8 object streams
+ 380 named destinations out of 1000 (max. 500000)
+ 389 words of extra memory for PDF output out of 10000 (max. 10000000)
 

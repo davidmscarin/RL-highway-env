@@ -881,4 +881,95 @@ At the conclusion of all episodes, the global metrics for each scenario can also
 \end{figure}
 
 
+\subsection{Performance Indicators}
+
+Based on the global metrics obtained from the simulation results, we will classify the performance of the different algorithm/policy combinations according to three categories: Efficiency, Safety, and Adaptability. 
+
+In this analysis we will use the following indicators:
+
+\subsubsection{Traffic Flow Efficiency}
+
+\textbf{Average Speed per Arrived Vehicle} 
+
+\[
+\text{Efficiency} = \frac{\text{Average Speed}}{\text{Average Arrivals per Episode}}
+\]
+
+Dividing the overall speed by the number of arrived vehicles gives a sense of how fast vehicles are reaching their destinations. Higher values indicate not only a good throughput but also timely arrivals.
+
+\subsubsection{Safety Indicators}
+
+\textbf{Collision Rate per 100 Steps} 
+
+\[
+\text{Collision Rate} = \frac{\text{Average Collisions per Episode}}{\text{Average Episode Length}} \times 100
+\]
+
+Normalizing the collision count by the episode length accounts for varying durations of simulations, making it easier to compare safety across different scenarios or environments. Reporting collisions per 100 steps provides a standardized and interpretable safety metric.
+
+
+\textbf{Efficiency-to-Safety Tradeoff Index}
+\[
+\text{Tradeoff Index} = \frac{\text{Average Speed per Arrived Vehicle}}{\text{Collision Rate per 100 Steps}}
+\]
+
+This indicator balances the system's efficiency (how fast vehicles are moving and arriving) against its safety (collision rate).
+
+
+
+
+\subsubsection{Adaptability to Varying Traffic Conditions}
+
+\textbf{Relative Variance in Throughput}
+\[
+\text{Adaptability} = \frac{\text{Variance(Throughput)}}{\text{Mean(Throughput)}}
+\]
+
+The relative variance of throughput under different traffic densities captures the system's stability. Lower relative variance indicates consistent performance, even under fluctuating conditions.
+
+
+
+\textbf{Traffic Load Adaptability} 
+Compare throughput or wait times between low and high-density traffic scenarios, e.g.:
+\[
+\text{Load Adaptability} = \frac{\text{Throughput (High Density)}}{\text{Throughput (Low Density)}}
+\]
+
+This measures how well the system scales and maintains performance as traffic density increases.
+
+
+\textbf{Safety Margins Under Stress}
+\[
+\text{Stress Safety Index} = \frac{\text{Collision Rate (High Density)}}{\text{Collision Rate (Low Density)}}
+\]
+
+Quantifying how safety degrades under heavier traffic loads provides insights into the robustness of safety mechanisms.
+
+
+We will categorize each metric (Efficiency, Safety, and Adaptability) into High, Medium, and Low categories for each algorithm-policy pair.
+
+\begin{itemize}
+    \item \textbf{Efficiency (Average Speed per Arrived Vehicle):}
+    \begin{itemize}
+        \item High: Top 33\% of values
+        \item Medium: Middle 33\% of values
+        \item Low: Bottom 33\% of values
+    \end{itemize}
+
+    \item \textbf{Safety (Collision Rate per 100 Steps):}
+    \begin{itemize}
+        \item High: Lowest 33\% of values (lower collision rate is better)
+        \item Medium: Middle 33\% of values
+        \item Low: Highest 33\% of values (higher collision rate is worse)
+    \end{itemize}
+
+    \item \textbf{Adaptability (Adaptability, Load Adaptability, Stress Safety Index):}
+    \begin{itemize}
+        \item High: Lowest 33\% of adaptability values
+        \item Medium: Middle 33\% of values
+        \item Low: Highest 33\% of adaptability values (greater variance means lower adaptability)
+    \end{itemize}
+\end{itemize}
+
+These indicators are classified using quantiles (33\%, 67\%) to categorize them into High, Medium, and Low categories.
 
