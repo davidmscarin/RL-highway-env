@@ -56,10 +56,10 @@
 \contentsline {subsubsection}{Traffic Flow Efficiency}{31}{subsubsection*.32}%
 \contentsline {subsubsection}{Safety Indicators}{31}{subsubsection*.33}%
 \contentsline {subsubsection}{Adaptability to Varying Traffic Conditions}{31}{subsubsection*.34}%
-\contentsline {chapter}{\numberline {5}Results and Discussion}{33}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Results and Discussion}{33}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Performance Indicators and Algorithms Classification}{36}{subsection.5.1.1}%
-\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{39}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Conclusions}{39}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Future Work}{39}{section.6.2}%
-\contentsline {chapter}{\numberline {A}Appendix: Deploying the App}{43}{appendix.A}%
+\contentsline {chapter}{\numberline {5}Results and Discussion}{34}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Results and Discussion}{34}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Performance Indicators and Algorithms Classification}{37}{subsection.5.1.1}%
+\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{40}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusions}{40}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Future Work}{40}{section.6.2}%
+\contentsline {chapter}{\numberline {A}Appendix: Deploying the App}{44}{appendix.A}%

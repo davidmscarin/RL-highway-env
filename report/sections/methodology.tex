@@ -946,7 +946,48 @@ This measures how well the system scales and maintains performance as traffic de
 Quantifying how safety degrades under heavier traffic loads provides insights into the robustness of safety mechanisms.
 
 
-We will categorize each metric (Efficiency, Safety, and Adaptability) into High, Medium, and Low categories for each algorithm-policy pair.
+
+\subsection*{Indicators and Metrics for Classification}
+
+The following metrics are considered for each indicator:
+
+\textbf{1. Indicator: Efficiency}
+Efficiency in terms of average speed per arrived vehicle, considering both sparse and dense traffic conditions.
+\begin{itemize}
+    \item\textbf{Metric:} Average Speed per Arrived Vehicle
+    \item \textbf{Related Metrics:} The "efficiency" values from both sparse and dense traffic datasets are considered:
+    \begin{itemize}
+        \item \textit{Efficiency (Sparse Traffic):} 
+        \item \textit{Efficiency (Dense Traffic):} 
+    \end{itemize}
+    The final efficiency value is typically a combination of both sparse and dense traffic metrics, which can be averaged or treated in other ways, depending on how the final value is calculated.
+\end{itemize}
+
+\textbf{2. Indicator: Safety}
+Collision rate per 100 steps, considering both sparse and dense traffic conditions.
+\begin{itemize}
+    \item \textbf{Metric:} Collision Rate per 100 Steps
+    \item \textbf{Related Metrics:} The "collision rate per 100 steps" from both sparse and dense traffic datasets are considered:
+    \begin{itemize}
+        \item \textit{Collision Rate (Sparse Traffic):} 
+        \item \textit{Collision Rate (Dense Traffic):} 
+    \end{itemize}
+    The classification of safety is based on the collision rate, where lower collision rates indicate better safety. Therefore, the best safety performance is considered as the lowest 33\% of values.
+\end{itemize}
+
+\textbf{3. Indicator: Adaptability}
+Measured by adaptability, load adaptability, and the stress safety index, focusing on throughput variance, traffic load adaptability, and safety under stress.
+\begin{itemize}
+    \item \textbf{Metrics:} The "Adaptability" values from the adaptability metrics dataset are used:
+    \begin{itemize}
+        \item \textit{Adaptability (Relative Variance in Throughput):} 
+        \item \textit{Load Adaptability:} 
+        \item \textit{Stress Safety Index:} 
+    \end{itemize}
+    Adaptability is classified by the relative variance in throughput (or how stable the throughput is under varying traffic conditions), where a \textbf{lower variance} indicates better adaptability.
+\end{itemize}
+
+These indicators are classified using quantiles (33\%, 67\%) to categorize them into \textbf{High}, \textbf{Medium}, and \textbf{Low} categories.
 
 \begin{itemize}
     \item \textbf{Efficiency (Average Speed per Arrived Vehicle):}
@@ -971,5 +1012,4 @@ We will categorize each metric (Efficiency, Safety, and Adaptability) into High,
     \end{itemize}
 \end{itemize}
 
-These indicators are classified using quantiles (33\%, 67\%) to categorize them into High, Medium, and Low categories.
 
