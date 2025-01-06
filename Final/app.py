@@ -870,7 +870,7 @@ with tabs[3]:
 
     # Apply highlighting to the Adaptability, Load Adaptability, and Stress Safety Index columns
     styled_adaptability = adaptability_table.style \
-        .apply(highlight_best, subset=['Adaptability'], ascending=False, axis=0) \
+        .apply(highlight_best, subset=['Adaptability'], ascending=True, axis=0) \
         .apply(highlight_best, subset=['Load Adaptability'], ascending=False, axis=0) \
         .apply(highlight_best, subset=['Stress Safety Index'], ascending=True, axis=0) \
         .format({
@@ -1048,6 +1048,8 @@ with tabs[3]:
 
     # Streamlit display
     st.write("### Algorithm Classification Table")
+    st.write("These indicators are classified using **quantiles (33%, 67%)** to categorize them into High, Medium, and Low categories.")  
+ 
     st.markdown(styled_combined.to_html(index=False), unsafe_allow_html=True)
 
 
