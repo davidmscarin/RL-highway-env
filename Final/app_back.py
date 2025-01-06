@@ -255,7 +255,7 @@ with col2:
         st.session_state.video_played = False  
 
 
-tabs = st.tabs(["Introduction", "Training", "Simulation","Results & Conclusions"])
+tabs = st.tabs(["Introduction", "Training", "Simulation","Conclusions"])
 
 # First tab: Introduction
 with tabs[0]:
@@ -767,7 +767,7 @@ with tabs[2]:
     
 # Last tab: Conclusions
 with tabs[3]:
-    st.title("Results")
+    st.title("Conclusions")
     global_metrics_file = 'videos/global_metrics.csv'  
 
     df = pd.read_csv(global_metrics_file)
@@ -793,273 +793,155 @@ with tabs[3]:
     st.write("## Performance Indicators: ")
 
 
-    import pandas as pd
-    import streamlit as st
+    # Data for the table
+    data = {
+        "Algorithm": ["baseline", "dqn", "dqn", "dqn", "ppo", "ppo"],
+        "Policy": ["none", "cnn", "mlp", "social attention", "cnn", "mlp"],
+        "Efficiency": ["Medium", "High", "High", "High", "Medium", "Medium"],
+        "Safety": ["Low", "High", "High", "High", "Medium", "Medium"],
+        "Adaptability": ["Low", "Medium", "Medium", "High", "Medium", "Low"]
+    }
 
-    # Load the data from the CSV file
+    # Create DataFrame
+    df = pd.DataFrame(data)
+
+    # Function to highlight specific row
+    def highlight_row(row):
+        if row['Algorithm'] == 'dqn' and row['Policy'] == 'social attention':
+            return ['background-color: orange'] * len(row)
+        else:
+            return [''] * len(row)
+
+    # Style the DataFrame with conditional formatting
+    styled_df = df.style.set_table_attributes('class="dataframe"') \
+                        .apply(highlight_row, axis=1) \
+                        .set_properties(**{'text-align': 'center', 'font-size': '12px'})
+
+    # Convert styled DataFrame to HTML
+    df_html = styled_df.to_html(index=False, escape=False)
+
+    # Display the table
+    st.markdown(f"<div class='dataframe'>{df_html}</div>", unsafe_allow_html=True)
+
+
+
+
+
+
+    # Load the data
     file_path = 'videos/global_metrics.csv'
     df = pd.read_csv(file_path)
 
-    # Calculate the required metrics
-    # 1. Calculate Average Speed per Arrived Vehicle (Efficiency)
-    df['efficiency'] = df['global_avg_speed'] / df['avg_arrivals_per_episode']
-
-    # 2. Calculate Collision Rate per 100 Steps (Safety)
+    # Calculate derived indicators
+    df['avg_speed_per_arrived_vehicle'] = df['global_avg_speed'] / df['avg_arrivals_per_episode']
     df['collision_rate_per_100_steps'] = (df['avg_collisions_per_episode'] / df['avg_episode_length']) * 100
 
-    # 3. Calculate Efficiency-to-Safety Tradeoff Index
-    df['tradeoff_index'] = df['efficiency'] / df['collision_rate_per_100_steps']
+    # Group by traffic and calculate variance for adaptability
+    grouped = df.groupby('traffic').agg({
+        'avg_arrivals_per_episode': ['var', 'mean'],
+        'avg_collisions_per_episode': 'mean',
+        'avg_episode_length': 'mean'
+    }).reset_index()
 
-    # Split data into sparse and dense traffic
-    df_sparse = df[df['traffic'] == 'sparse']
-    df_dense = df[df['traffic'] == 'dense']
+    grouped.columns = ['traffic', 'throughput_variance', 'throughput_mean', 'collision_mean', 'avg_episode_length_mean']
+    grouped['relative_variance_throughput'] = grouped['throughput_variance'] / grouped['throughput_mean']
 
-    # Function to highlight the best values for a column
+    # Merge grouped adaptability metrics back into the main dataframe for easy reference
+    adaptability_metrics = grouped[['traffic', 'relative_variance_throughput']]
+    df = df.merge(adaptability_metrics, on='traffic', how='left')
+
+    # Additional indicators
+    df['throughput_to_collision_ratio'] = df['avg_arrivals_per_episode'] / df['avg_collisions_per_episode']
+    df['efficiency_to_safety_tradeoff'] = df['avg_speed_per_arrived_vehicle'] / df['collision_rate_per_100_steps']
+
+    # Traffic Load Adaptability Calculation (using 'avg_arrivals_per_episode' for throughput)
+    dense_traffic = df[df['traffic'] == 'dense']
+    sparse_traffic = df[df['traffic'] == 'sparse']
+
+    # Merge back on traffic type to get dense vs sparse throughput comparison
+    traffic_load_adaptability_df = pd.merge(dense_traffic[['algorithm', 'policy', 'avg_arrivals_per_episode']],
+                                            sparse_traffic[['algorithm', 'policy', 'avg_arrivals_per_episode']],
+                                            on=['algorithm', 'policy'],
+                                            suffixes=('_dense', '_sparse'))
+
+    # Calculate Load Adaptability (Dense / Sparse)
+    traffic_load_adaptability_df['traffic_load_adaptability'] = (traffic_load_adaptability_df['avg_arrivals_per_episode_dense'] /
+                                                                traffic_load_adaptability_df['avg_arrivals_per_episode_sparse'])
+
+    # Safety Margins Under Stress Calculation (using 'avg_collisions_per_episode' for collisions)
+    collision_rate_dense = df[df['traffic'] == 'dense']
+    collision_rate_sparse = df[df['traffic'] == 'sparse']
+
+    # Merge back on traffic type to get dense vs sparse collision comparison
+    safety_margin_df = pd.merge(collision_rate_dense[['algorithm', 'policy', 'avg_collisions_per_episode']],
+                                collision_rate_sparse[['algorithm', 'policy', 'avg_collisions_per_episode']],
+                                on=['algorithm', 'policy'],
+                                suffixes=('_dense', '_sparse'))
+
+    # Calculate Stress Safety Index (Dense / Sparse)
+    safety_margin_df['safety_margin_under_stress'] = (safety_margin_df['avg_collisions_per_episode_dense'] /
+                                                    safety_margin_df['avg_collisions_per_episode_sparse'])
+
+    # Merge Traffic Load Adaptability and Safety Margins under Stress back into the original dataframe
+    df = pd.merge(df, traffic_load_adaptability_df[['algorithm', 'policy', 'traffic_load_adaptability']], 
+                on=['algorithm', 'policy'], how='left')
+    df = pd.merge(df, safety_margin_df[['algorithm', 'policy', 'safety_margin_under_stress']], 
+                on=['algorithm', 'policy'], how='left')
+
+    # Drop the unnecessary columns (including the relative_variance_throughput)
+    df = df.drop(columns=['avg_episode_length', 'global_avg_speed', 'avg_arrivals_per_episode', 'avg_collisions_per_episode', 'relative_variance_throughput'])
+
+    # Round to 3 decimal places for differentiation
+    df = df.round({
+        'avg_speed_per_arrived_vehicle': 3,
+        'collision_rate_per_100_steps': 3,
+        'throughput_to_collision_ratio': 3,
+        'efficiency_to_safety_tradeoff': 3,
+        'traffic_load_adaptability': 3,
+        'safety_margin_under_stress': 3
+    })
+
+    # Sort the dataframe by traffic, algorithm, and policy
+    df['traffic'] = pd.Categorical(df['traffic'], categories=['sparse', 'dense'], ordered=True)
+    df['algorithm'] = pd.Categorical(df['algorithm'], categories=['baseline', 'dqn', 'ppo'], ordered=True)
+
+    df_sorted = df.sort_values(by=['traffic', 'algorithm', 'policy'])
+
+    # Function to highlight the best result
     def highlight_best(s, ascending=True):
+        """Highlights the best value in a column."""
         is_best = s == (s.min() if ascending else s.max())
         return ['background-color: #FFA500;' if v else '' for v in is_best]
 
-    # Create the styled dataframes for sparse traffic
-    styled_sparse = df_sparse[['algorithm', 'policy', 'traffic', 'efficiency', 'collision_rate_per_100_steps', 'tradeoff_index']].style \
-        .apply(highlight_best, subset=['efficiency', 'tradeoff_index'], ascending=False, axis=0) \
+
+    # Apply conditional formatting to relevant columns
+    styled_df = df_sorted.style \
+        .apply(highlight_best, subset=['avg_speed_per_arrived_vehicle'], ascending=False, axis=0) \
         .apply(highlight_best, subset=['collision_rate_per_100_steps'], ascending=True, axis=0) \
+        .apply(highlight_best, subset=['throughput_to_collision_ratio'], ascending=False, axis=0) \
+        .apply(highlight_best, subset=['efficiency_to_safety_tradeoff'], ascending=False, axis=0) \
+        .apply(highlight_best, subset=['traffic_load_adaptability'], ascending=False, axis=0) \
+        .apply(highlight_best, subset=['safety_margin_under_stress'], ascending=False, axis=0) \
         .format({
-            'efficiency': '{:.2f}',
+            'avg_speed_per_arrived_vehicle': '{:.2f}',
             'collision_rate_per_100_steps': '{:.2f}',
-            'tradeoff_index': '{:.2f}'
+            'throughput_to_collision_ratio': '{:.2f}',
+            'efficiency_to_safety_tradeoff': '{:.2f}',
+            'traffic_load_adaptability': '{:.2f}',
+            'safety_margin_under_stress': '{:.2f}'
         }) \
-        .set_properties(**{'text-align': 'center', 'font-size': '12px'}) \
-        .set_table_attributes('class="dataframe"')
+        .set_properties(**{'text-align': 'center', 'font-size': '12px'})
 
-    # Create the styled dataframes for dense traffic
-    styled_dense = df_dense[['algorithm', 'policy', 'traffic', 'efficiency', 'collision_rate_per_100_steps', 'tradeoff_index']].style \
-        .apply(highlight_best, subset=['efficiency', 'tradeoff_index'], ascending=False, axis=0) \
-        .apply(highlight_best, subset=['collision_rate_per_100_steps'], ascending=True, axis=0) \
-        .format({
-            'efficiency': '{:.2f}',
-            'collision_rate_per_100_steps': '{:.2f}',
-            'tradeoff_index': '{:.2f}'
-        }) \
-        .set_properties(**{'text-align': 'center', 'font-size': '12px'}) \
-        .set_table_attributes('class="dataframe"')
+    # Change font size for column headers
+    styled_df = styled_df.set_table_styles([
+        {'selector': 'th', 'props': [('font-size', '12px'), ('text-align', 'center')]}  # Set font size for column headers
+    ])
 
-    # Calculate Adaptability and Stress Safety Index by algorithm and policy
-    # 5.2.3 Adaptability to Varying Traffic Conditions
+    # Convert the styled DataFrame to HTML for Streamlit
+    df_html = styled_df.to_html(index=False, escape=False)
 
-    # Adaptability: Variance / Mean for each algorithm and policy
-    adaptability = df.groupby(['algorithm', 'policy'])['avg_arrivals_per_episode'].agg(['var', 'mean'])
-    adaptability['adaptability'] = adaptability['var'] / adaptability['mean']
-
-    # Load Adaptability: Dense / Sparse for each algorithm and policy
-    load_adaptability = df_dense.groupby(['algorithm', 'policy'])['avg_arrivals_per_episode'].mean() / df_sparse.groupby(['algorithm', 'policy'])['avg_arrivals_per_episode'].mean()
-
-    # Stress Safety Index: Collision Rate (Dense) / Collision Rate (Sparse) for each algorithm and policy
-    collision_rate_dense = df_dense.groupby(['algorithm', 'policy'])['collision_rate_per_100_steps'].mean()
-    collision_rate_sparse = df_sparse.groupby(['algorithm', 'policy'])['collision_rate_per_100_steps'].mean()
-    stress_safety_index = collision_rate_dense / collision_rate_sparse
-
-    # Combine these metrics into a single DataFrame
-    adaptability_table = pd.DataFrame({
-        'Adaptability': adaptability['adaptability'],
-        'Load Adaptability': load_adaptability,
-        'Stress Safety Index': stress_safety_index
-    })
-
-    # Reset the index to remove multi-index and create a single-level index
-    adaptability_table.reset_index(inplace=True)
-
-    # Apply highlighting to the Adaptability, Load Adaptability, and Stress Safety Index columns
-    styled_adaptability = adaptability_table.style \
-        .apply(highlight_best, subset=['Adaptability'], ascending=False, axis=0) \
-        .apply(highlight_best, subset=['Load Adaptability'], ascending=False, axis=0) \
-        .apply(highlight_best, subset=['Stress Safety Index'], ascending=True, axis=0) \
-        .format({
-            'Adaptability': '{:.2f}',
-            'Load Adaptability': '{:.2f}',
-            'Stress Safety Index': '{:.2f}'
-        }) \
-        .set_properties(**{'text-align': 'center', 'font-size': '12px'}) \
-        .set_table_attributes('class="dataframe"')
-
-    # Convert styled DataFrames to HTML
-    df_sparse_html = styled_sparse.to_html(index=False, escape=False)
-    df_dense_html = styled_dense.to_html(index=False, escape=False)
-    df_adaptability_html = styled_adaptability.to_html(index=False, escape=False)
-
-    # Display in Streamlit
-    st.write("### Efficiency / Security Analysis")
-
-    # Create three columns for the formulas
-    col1, col2, col3 = st.columns(3)
-
-    # First column: Efficiency Formula
-    with col1:
-        st.latex(r'''
-        \scriptsize
-        \text{Efficiency} = \frac{\text{Average Speed}}{\text{Average Arrivals per Episode}}
-        ''')
-
-    # Second column: Collision Rate Formula
-    with col2:
-        st.latex(r'''
-        \scriptsize
-        \text{Collision Rate per 100 Steps} = \frac{\text{Average Collisions per Episode}}{\text{Average Episode Length}} \times 100
-        ''')
-
-    # Third column: Tradeoff Index Formula
-    with col3:
-        st.latex(r'''
-        \scriptsize
-        \text{Tradeoff Index} = \frac{\text{Average Speed per Arrived Vehicle}}{\text{Collision Rate per 100 Steps}}
-        ''')
-
-    # Create columns in Streamlit for displaying Sparse and Dense traffic data
-    col1, col2 = st.columns(2)
-
-    with col1:
-        # Display Sparse Traffic Dataframe
-        st.write("##### Sparse Traffic Metrics:")
-        st.markdown(df_sparse_html, unsafe_allow_html=True)
-
-    with col2:
-        # Display Dense Traffic Dataframe
-        st.write("##### Dense Traffic Metrics:")
-        st.markdown(df_dense_html, unsafe_allow_html=True)
-
-    # Create a column for Adaptability, Load Adaptability, and Stress Safety Index
-    st.write("#### Adaptability to Varying Traffic Conditions:")
-    col1, col2, col3 = st.columns(3)
-
-    # First column: Relative Variance in Throughput (Adaptability)
-    with col1:
-        st.latex(r'''
-        \scriptsize
-        \text{Adaptability} = \frac{\text{Variance}(\text{Average Arrivals per Episode})}{\text{Mean}(\text{Average Arrivals per Episode})}
-        ''')
-
-    # Second column: Traffic Load Adaptability
-    with col2:
-        st.latex(r'''
-        \scriptsize
-        \text{Load Adaptability} = \frac{\text{Average Arrivals per Episode (Dense Traffic)}}{\text{Average Arrivals per Episode(Sparse Traffic)}}
-        ''')
-
-    # Third column: Stress Safety Index
-    with col3:
-        st.latex(r'''
-        \scriptsize
-        \text{Stress Safety Index} = \frac{\text{Collision Rate (Dense Traffic)}}{\text{Collision Rate (Sparse Traffic)}}
-        ''')
-
-    st.markdown(df_adaptability_html, unsafe_allow_html=True)
-
-
-    import pandas as pd
-    import numpy as np
-    import streamlit as st
-
-    # Data
-    sparse_metrics = pd.DataFrame({
-        'algorithm': ['baseline', 'dqn', 'dqn', 'ppo', 'ppo', 'dqn'],
-        'policy': ['none', 'cnn', 'mlp', 'cnn', 'mlp', 'social attention'],
-        'traffic': ['sparse'] * 6,
-        'efficiency': [3.25, 2.03, 1.30, 1.73, 1.54, 2.79],
-        'collision_rate_per_100_steps': [16.63, 4.23, 4.47, 7.48, 6.24, 9.63],
-        'tradeoff_index': [0.20, 0.48, 0.29, 0.23, 0.25, 0.29]
-    })
-
-    dense_metrics = pd.DataFrame({
-        'algorithm': ['baseline', 'dqn', 'dqn', 'ppo', 'ppo', 'dqn'],
-        'policy': ['none', 'cnn', 'mlp', 'cnn', 'mlp', 'social attention'],
-        'traffic': ['dense'] * 6,
-        'efficiency': [4.83, 3.71, 1.98, 3.30, 1.86, 5.43],
-        'collision_rate_per_100_steps': [20.83, 11.29, 10.95, 15.00, 8.74, 17.50],
-        'tradeoff_index': [0.23, 0.33, 0.18, 0.22, 0.21, 0.31]
-    })
-
-    adaptability_metrics = pd.DataFrame({
-        'algorithm': ['baseline', 'dqn', 'dqn', 'dqn', 'ppo', 'ppo'],
-        'policy': ['none', 'cnn', 'mlp', 'social attention', 'cnn', 'mlp'],
-        'Adaptability': [0.11, 0.24, 0.12, 0.26, 0.20, 0.05],
-        'Load Adaptability': [0.67, 0.60, 0.70, 0.54, 0.59, 0.80],
-        'Stress Safety Index': [1.25, 2.67, 2.45, 1.82, 2.01, 1.40]
-    })
-
-    # Combine all dataframes
-    sparse_metrics = sparse_metrics.rename(columns={
-        'efficiency': 'efficiency_sparse',
-        'collision_rate_per_100_steps': 'collision_rate_sparse',
-        'tradeoff_index': 'tradeoff_sparse'
-    })
-    dense_metrics = dense_metrics.rename(columns={
-        'efficiency': 'efficiency_dense',
-        'collision_rate_per_100_steps': 'collision_rate_dense',
-        'tradeoff_index': 'tradeoff_dense'
-    })
-
-    combined_df = pd.merge(sparse_metrics, dense_metrics, on=['algorithm', 'policy'])
-    combined_df = pd.merge(combined_df, adaptability_metrics, on=['algorithm', 'policy'])
-
-    # Define metric classification function
-    def classify_metric(metric_values, ascending=True):
-        quantiles = np.percentile(metric_values, [33, 67])
-        if ascending:
-            # Lower is better
-            conditions = [
-                metric_values <= quantiles[0],
-                (metric_values > quantiles[0]) & (metric_values <= quantiles[1]),
-                metric_values > quantiles[1],
-            ]
-        else:
-            # Higher is better
-            conditions = [
-                metric_values >= quantiles[1],
-                (metric_values > quantiles[0]) & (metric_values < quantiles[1]),
-                metric_values <= quantiles[0],
-            ]
-        categories = ["High", "Medium", "Low"]
-        return np.select(conditions, categories, default="Unknown")
-
-    # Apply classification for each metric
-    combined_df["efficiency_category"] = classify_metric(combined_df["efficiency_sparse"], ascending=False)
-    combined_df["safety_category"] = classify_metric(combined_df["collision_rate_sparse"], ascending=True)
-    combined_df["adaptability_category"] = classify_metric(combined_df["Adaptability"], ascending=True)
-
-    # Create a styled dataframe
-    def highlight_category(val):
-        if val == "High":
-            return "background-color: #f8d7da; color: black;"  # Light red
-            
-        elif val == "Medium":
-            return "background-color: #d4edda; color: black;"  # Light green
-            
-        elif val == "Low":
-            return "background-color: #fff3cd; color: black;"  # Light yellow
-        return ""
-
-    styled_combined = combined_df[[
-        "algorithm", "policy", "efficiency_category", "safety_category", "adaptability_category"
-        ]].style \
-            .map(highlight_category, subset=["efficiency_category", "safety_category", "adaptability_category"]) \
-            .set_properties(**{'text-align': 'center', 'font-size': '12px'}) \
-            .set_table_attributes('class="dataframe"')
-
-
-
-    # Streamlit display
-    st.write("### Algorithm Classification Table")
-    st.markdown(styled_combined.to_html(index=False), unsafe_allow_html=True)
-
-
-
-
-
-
-
-
-
-
-
+    st.write("### Performance Indicators:")
+    st.markdown(f"<div class='dataframe'>{df_html}</div>", unsafe_allow_html=True)
 
 
 
