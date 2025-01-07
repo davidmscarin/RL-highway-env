@@ -434,66 +434,6 @@ with tabs[1]:
         st.markdown(f'<div class=image-container style="text-align: center;">{svg_plot}</div>', unsafe_allow_html=True)
 
 
-    #Social Influence
-    import streamlit as st
-
-    text = """
-
-    ### Decentralized Training with Social Influence
-
-    Each agent is represented by its own network (and therefore optimizer, during training). 
-    to approximate our theoretical $Q$ function, which we use to pick the maximum value action for each state. 
-    We assume that every $Q$ function obeys the Bellman Equation:
-    """
-
-    st.markdown(text)
-
-    st.latex(r"Q^\pi(s, a) = r + \gamma Q^\pi(s', \pi(s'))")
-
-    st.markdown("From this, we get the temporal difference error, \\( \delta \\), which we attempt to minimize:")
-
-    st.latex(r"\delta = Q(s, a) - \left(r + \gamma \max_{a'} Q(s', a')\right)")
-
-    st.markdown("""
-    Loss is calculated from a batch of transitions:
-    """)
-
-    st.latex(r"L = \frac{1}{|B|} \sum_{(s, a, s', r) \in B} L(\delta)")
-
-    st.markdown("where:")
-
-    st.latex(r"""
-    L(\delta) =
-    \begin{cases} 
-    \frac{1}{2}\delta^2 & \text{for } |\delta| \leq 1, \\
-    |\delta| - \frac{1}{2} & \text{otherwise}.
-    \end{cases}
-    """)
-
-    st.markdown("""
-    where \\( (s, a, s', r) \\) is a single transition.
-
-    We chose to implement what is known as the Basic Social Influence mechanism, 
-    which shifts an agent's rewards using counterfactuals, so that it becomes:
-    """)
-
-    st.latex(r"r^k_t = \alpha e^k_t + \beta c^k_t")
-
-    st.markdown("""
-    where \\( e^k_t \\) is the extrinsic or environmental reward, and \\( c^k_t \\) is the causal 
-    influence reward. Essentially, agent \\( k \\) asks the question: 
-    *"How would \\( j \)'s action change if I had acted differently in this situation?"* 
-
-    This causal influence reward is obtained by calculating the divergence between 
-    the marginal policy of \\( j \\) (if \\( j \\) did not consider \\( k \\)) and the 
-    conditional policy of \\( j \\) (when \\( j \\) does consider \\( k \\)).
-    """)
-
-    # Display the image separately
-    st.image("images/social_influence.png", caption="Chain of social influence")
-
-    st.image("images/dqn_SI_metrics.png", caption="Training of Social Influence Decentralized Agents")
-
     #Social Attention TRAIN
     latex_file_path = "latex/social_attention_algorithm.tex" 
     latex_arrays = load_latex_arrays(latex_file_path)
@@ -632,6 +572,65 @@ with tabs[1]:
         st.markdown(f'<div class=image-container style="text-align: center;">{svg_plot}</div>', unsafe_allow_html=True)
 
 
+#Social Influence
+    import streamlit as st
+
+    text = """
+
+    ### Decentralized Training with Social Influence
+
+    Each agent is represented by its own network (and therefore optimizer, during training). 
+    to approximate our theoretical $Q$ function, which we use to pick the maximum value action for each state. 
+    We assume that every $Q$ function obeys the Bellman Equation:
+    """
+
+    st.markdown(text)
+
+    st.latex(r"Q^\pi(s, a) = r + \gamma Q^\pi(s', \pi(s'))")
+
+    st.markdown("From this, we get the temporal difference error, \\( \delta \\), which we attempt to minimize:")
+
+    st.latex(r"\delta = Q(s, a) - \left(r + \gamma \max_{a'} Q(s', a')\right)")
+
+    st.markdown("""
+    Loss is calculated from a batch of transitions:
+    """)
+
+    st.latex(r"L = \frac{1}{|B|} \sum_{(s, a, s', r) \in B} L(\delta)")
+
+    st.markdown("where:")
+
+    st.latex(r"""
+    L(\delta) =
+    \begin{cases} 
+    \frac{1}{2}\delta^2 & \text{for } |\delta| \leq 1, \\
+    |\delta| - \frac{1}{2} & \text{otherwise}.
+    \end{cases}
+    """)
+
+    st.markdown("""
+    where \\( (s, a, s', r) \\) is a single transition.
+
+    We chose to implement what is known as the Basic Social Influence mechanism, 
+    which shifts an agent's rewards using counterfactuals, so that it becomes:
+    """)
+
+    st.latex(r"r^k_t = \alpha e^k_t + \beta c^k_t")
+
+    st.markdown("""
+    where \\( e^k_t \\) is the extrinsic or environmental reward, and \\( c^k_t \\) is the causal 
+    influence reward. Essentially, agent \\( k \\) asks the question: 
+    *"How would \\( j \)'s action change if I had acted differently in this situation?"* 
+
+    This causal influence reward is obtained by calculating the divergence between 
+    the marginal policy of \\( j \\) (if \\( j \\) did not consider \\( k \\)) and the 
+    conditional policy of \\( j \\) (when \\( j \\) does consider \\( k \\)).
+    """)
+
+    # Display the image separately
+    st.image("images/social_influence.png", caption="Chain of social influence")
+
+    st.image("images/dqn_SI_metrics.png", caption="Training of Social Influence Decentralized Agents")
     
 
 # Third tab: Simulation
