@@ -1,0 +1,119 @@
+\documentclass[a4paper,10pt]{report}
+
+% Packages
+\usepackage{titlesec}  % Required for \titleformat
+\usepackage[utf8]{inputenc} % UTF-8 encoding
+\usepackage{amsmath,amssymb} % Math symbols
+\usepackage{graphicx} % Figures
+\usepackage{hyperref} % Clickable links
+\usepackage{geometry} % Page layout
+\usepackage{setspace} % Line spacing
+\usepackage{fancyhdr} % Header and footer
+\usepackage{tocloft} % Table of contents customization
+\usepackage{biblatex} % Bibliography
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{svg}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\lstdefinestyle{python}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  showstringspaces=false,
+}
+
+\lstdefinestyle{json}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  showstringspaces=false,
+}
+
+
+
+\addbibresource{references.bib} % Reference file
+
+\setlength{\headheight}{14.5pt}
+
+% Page layout
+\geometry{margin=1in}
+\setlength{\parskip}{0.5em} 
+\setlength{\parindent}{0em}
+\setstretch{1.0} 
+
+% Title format for chapters (remove "Chapter" text)
+\titleformat{\chapter}[hang]{\normalfont\huge\bfseries}{\thechapter.}{1em}{}
+
+\pagestyle{fancy} % Set global page style to fancy
+\fancyhf{} % Clear all headers and footers
+\renewcommand{\headrulewidth}{0pt} % Remove the header line
+\renewcommand{\footrulewidth}{0.4pt} % Optional: Add a footer line
+\fancyfoot[L]{Multi Agent Reinforcement Learning with Highway-Env} 
+\fancyfoot[R]{\thepage} % Page number on the right side of the footer
+
+% Ensure subsections appear in the TOC
+\setcounter{tocdepth}{2}  % This includes subsections in the TOC
+
+% Begin document
+\begin{document}
+
+% Title page
+\begin{titlepage}
+    \centering
+    {\Huge\bfseries Multi Agent Reinforcement Learning with Highway-Env\par}
+    \vspace{1cm}
+    {\Large David Scarin\par}
+    {\Large Francisco Silva\par}
+    {\Large Tomás Rodrigues\par}
+    \vspace{1cm}
+    {\Large Modelação e Simulação, M.IA, 2024/2025\par}
+    \vfill
+    Submission Date: \today
+\end{titlepage}
+
+% Table of Contents
+\tableofcontents
+\newpage
+
+% Abstract (without repeating the word Abstract)
+\chapter*{Abstract}  % Prevents chapter numbering
+\addcontentsline{toc}{chapter}{Abstract}  % Manually add Abstract to the ToC
+\input{sections/abstract}  % Assuming abstract is in a separate file
+
+% Chapters
+\chapter{Introduction}
+\input{sections/introduction}
+
+\chapter{Literature Review}
+\input{sections/literature}
+
+\chapter{Problem Formalization}
+\input{sections/formalization}
+
+\chapter{Methodology}
+\input{sections/methodology}
+
+\chapter{Results and Discussion}
+\input{sections/results}
+
+\chapter{Conclusions and Future Work}
+\input{sections/conclusions}
+
+% References
+\printbibliography
+
+% Appendices
+\appendix
+\chapter{How To: Run Train and Test Code}
+\input{sections/appendix}
+
+\end{document}
+
+

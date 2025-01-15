@@ -1,0 +1,51 @@
+\section{Literature Review}
+
+This section reviews relevant literature and resources foundational to the development of a Multi-Agent System (MAS) for managing autonomous vehicles 
+at road intersections. 
+
+These studies encompass Deep Reinforcement Learning (DRL) frameworks, applications in traffic systems, and recent advancements in multi-agent cooperation, robustness, and scalability.
+
+
+\textbf{Foundational DRL Frameworks:}
+
+\textit{rlagents: Implementations of Reinforcement Learning Algorithms}\cite{rl-agents} is a robust library offering implementations of DRL algorithms such as DQN, PPO, and A2C. 
+The modular framework supports easy customization and integration into traffic management systems, offering a robust foundation for training agents in navigation tasks.
+This library serves as the foundation for much of our work.
+
+\textbf{Attention Mechanisms in Dense Traffic:}
+
+Leurent and Mercat\cite{leurent2019socialattention} introduced the concept of social attention, which allows agents to prioritize essential interactions 
+in dense traffic scenarios.
+
+In our work, this concept has been incorporated into the agent's policy, demonstrating improved scalability and safety. 
+This aligns closely with the project's second stage, focused on perturbation testing.
+
+\textbf{Simulation Environments for Traffic Scenarios:}
+
+\textit{Highway Multi-Agent Environment}\cite{highwaymultiagentenv} provides a simulation platform for multi-agent systems, supporting sparse 
+and dense traffic configurations. 
+It enables realistic testing and evaluation of trained policies, addressing the project's goals of scalability and robustness.
+
+\textbf{Related Studies in DRL and Traffic Management:}
+
+Wei et al.\cite{wei2019intellilight} developed IntelliLight, a DRL-based traffic signal control system, demonstrating enhanced traffic throughput 
+and reduced delays. 
+
+Yang et al.\cite{yang2018meanfield} proposed Mean Field MARL to address scalability challenges in environments with numerous agents. 
+
+Chu et al.\cite{chu2019multiagent} applied MARL to intersection management, showcasing collaborative decision-making for optimizing intersection 
+traffic flow.
+
+Kiran et al.\cite{kiran2021survey} provided a survey on DRL in autonomous driving, highlighting challenges like environmental 
+perturbations and model transferability. 
+
+Chen et al.\cite{chen2021collisionavoidance} focused on collision avoidance using MARL in mixed traffic scenarios. 
+
+Wang et al.\cite{wang2020multiintersection} examined cooperative MARL for multi-intersection traffic signal control, demonstrating the benefits of decentralized learning. 
+
+Finally, Baker et al.\cite{baker2020emergent} explored emergent behaviors in MAS, emphasizing the importance of adaptive and cooperative policies. 
+
+Thananjeyan et al.\cite{thananjeyan2021} developed a DRL approach integrating safety constraints, ensuring reliable decision-making in 
+critical tasks.
+
+

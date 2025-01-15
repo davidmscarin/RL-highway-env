@@ -1,0 +1,34 @@
+\section{Conclusions}
+
+This project has successfully developed and evaluated a robust Multi-Agent System (MAS) for managing autonomous vehicles at road intersections. The primary objectives were to train agents using Deep Reinforcement Learning (DRL) algorithms, assess their performance under various traffic conditions, and evaluate the system's scalability and robustness.
+
+In the first phase, agents were trained using DRL algorithms such as DQN and PPO to enable autonomous decision-making for intersection crossing orders and speed control. The goal was to optimize traffic flow while ensuring safe navigation and collision avoidance. The training phase was successful, with the agents effectively adjusting their speeds, following traffic rules, and navigating the intersection.
+
+The second phase examined the agents' performance under different traffic densities, including sparse and dense traffic. The evaluation revealed that certain algorithms, particularly DQN with Social Attention, demonstrated superior adaptability to varying traffic conditions. In dense traffic scenarios, some algorithms faced challenges in maintaining safety and efficiency, leading to higher collision rates and reduced performance in terms of speed and collision avoidance.
+
+The third phase of the project focused on the scalability and robustness of the system. The collected performance metrics provided valuable insights into how the different algorithms fared across multiple simulations under various environmental conditions. The results showed that while algorithms like DQN with Social Attention excelled in efficiency and safety, others, such as PPO, struggled with adaptability in dense traffic scenarios.
+
+Overall, the project achieved its objectives by successfully training autonomous agents, evaluating their performance under diverse traffic conditions, and analyzing the system's scalability and robustness. The classification of the algorithms into performance categories such as efficiency, safety, and adaptability provides a clear understanding of their strengths and weaknesses. Based on these findings:
+
+\begin{itemize}
+    \item \textbf{Efficiency:} The DQN algorithm with the Social Attention policy is classified as \textit{High}, indicating exceptional performance in efficiency. DQN with CNN and PPO with CNN are classified as \textit{Medium}, while DQN with MLP and PPO with MLP are categorized as \textit{Low}, reflecting their subpar efficiency.
+    
+    \item \textbf{Safety:} The DQN with CNN policy excels in safety with a \textit{High} classification. Conversely, DQN with Social Attention and PPO with MLP fall into the \textit{Low} safety category. PPO with CNN and DQN with MLP show \textit{Medium} safety performance, indicating an average level of safety.
+    
+    \item \textbf{Adaptability:} Both the Baseline and PPO with MLP algorithms are classified as \textit{High} in adaptability, demonstrating strong performance in varying traffic conditions. DQN with CNN, PPO with CNN, and DQN with MLP are rated as \textit{Medium}, while DQN with Social Attention is ranked \textit{Low} in adaptability.
+\end{itemize}
+
+
+\section{Future Work}
+
+While this project has provided valuable insights into the performance of different DRL algorithms for managing autonomous vehicles at intersections, there are several areas where future work could further enhance the system:
+
+\begin{itemize}
+    \item \textbf{Exploring Additional DRL Algorithms}: Future work can investigate the use of more advanced DRL algorithms, such as A3C (Asynchronous Advantage Actor-Critic) or TRPO (Trust Region Policy Optimization), to further improve the learning efficiency and performance of the agents. These algorithms might offer better stability or faster convergence compared to the ones used in this study.
+    \item \textbf{Handling Complex Traffic Scenarios}: Future experiments could involve simulating more complex traffic environments, such as intersections with multiple lanes, traffic lights, or various types of vehicles. Introducing more variables could provide a more comprehensive test of the system's robustness and adaptability.
+    \item \textbf{Real-Time Agent Adaptation}: Enhancing the agents' ability to adapt in real-time to sudden changes in traffic patterns (e.g., unexpected vehicle arrivals, accidents, or emergency vehicle scenarios) could be explored. Implementing techniques such as online learning or meta-learning could allow the agents to update their policies during execution.
+    \item \textbf{Integration with Real-World Simulations}: Future research could focus on transferring the learned models to real-world environments, using simulations that closely resemble actual traffic intersections. This would involve integrating sensor data, real-time decision-making, and safety protocols for real-world deployment.
+    \item \textbf{Performance Evaluation in Mixed Traffic Conditions}: Exploring how the trained agents perform in mixed traffic environments with both human-driven and autonomous vehicles would be essential for real-world applications. This could include the analysis of how well the agents cooperate with human drivers or adapt to their actions.
+\end{itemize}
+
+By addressing these areas, the system can be further refined, improving its capabilities in real-world applications for managing autonomous vehicles and contributing to the broader field of intelligent transportation systems.

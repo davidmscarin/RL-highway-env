@@ -1,0 +1,40 @@
+\begin{array}{l}
+    \textbf{DQN Social Attention} \\
+    \scriptsize
+    \text{The attention mechanism utilizes multiple heads to compute} \\
+    \scriptsize
+    \text{context-sensitive embeddings, allowing the model to} \\
+    \scriptsize
+    \text{attend to different aspects of the input simultaneously}. \\
+    \scriptsize
+    \text{Each head processes the embeddings independently and} \\
+    \scriptsize
+    \text{outputs its own context-aware representation.} \\
+    \scriptsize
+    \text{The outputs from all heads are concatenated and projected to form the final embedding.} \\
+\end{array}
+
+\begin{array}{l}
+    \scriptsize
+    \text{The attention computation for each head is given by:} \\
+    \small
+    \text{output} = \sigma \left( \frac{Q K^T}{\sqrt{d_k}} \right) V \\
+\end{array}
+\begin{array}{l}
+    \scriptsize
+    \text{where:} \\
+    \scriptsize
+    Q = L_q(e_0), \; K = L_k(e_i), \; V = L_v(e_i) \\
+    \tiny
+    \text{- } e_i \text{ denotes the encoded state of vehicle } i, \text{ while } e_0 \text{ corresponds to the ego-vehicle.} \\
+    \tiny
+    \text{- } K \text{ (keys) represents descriptive features of surrounding vehicles.} \\
+    \tiny
+    \text{- } V \text{ (values) contains the embedded features used to compute the final output.} \\
+    \tiny
+    \text{- } L_q, \, L_k, \, L_v \text{ are shared linear projections applied to all vehicles' embeddings.} \\
+    \tiny
+    \text{- } \sigma \text{ is the softmax activation, normalizing attention scores across all vehicles.} \\
+    \tiny
+    \text{- } d_k \text{ represents the dimension of the key embeddings.} \\
+\end{array}

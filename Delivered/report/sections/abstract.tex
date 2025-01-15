@@ -1,0 +1,34 @@
+Autonomous driving has long been a significant and evolving area of research. With advancements in deep learning techniques, coupled with 
+innovations in computing power and vehicle technologies, the field has become increasingly prominent. 
+
+The challenge of managing multiple vehicles on the road while ensuring they adhere to common traffic rules can be framed as an agent-based simulation,
+ where each vehicle has individual goals yet must gather information from the environment and act accordingly, accounting for the behavior of other 
+ agents (vehicles) within the same environment.
+
+This project focuses on simulating road intersection scenarios, where autonomous vehicles must collaboratively determine crossing orders and adjust 
+speeds to maximize traffic efficiency while minimizing collision risks. 
+
+Using the Highway Env simulation framework, a Multi-Agent System (MAS) was developed, consisting of groups of four agents, each trained with 
+distinct Deep Reinforcement Learning (DRL) policies. These agents were tested under various traffic conditions and environmental variables, 
+such as varying traffic density, to evaluate their real-time decision-making and adaptability. 
+
+The research successfully trained the agents using DRL algorithms, including DQN and PPO, enabling them to optimize intersection navigation 
+by enhancing safety and improving traffic flow. 
+
+Agent behavior was evaluated across four distinct policies: 
+(1) a Baseline No Policy (control); (2) MLP Policy, which uses a multi-layer perceptron to process environmental features like speed, vehicle 
+distance, and intersection layout; (3) CNN Policy, which uses convolutional neural networks to interpret visual and spatial data, 
+enabling informed decision-making based on grid representations of intersections; and (4) Social Attention Mechanism Policy, 
+which incorporates social attention to improve cooperation and coordination by interpreting the behaviors and intentions of nearby agents. 
+Each policy was assessed in terms of efficiency (e.g., throughput), safety (e.g., collision rates), and adaptability to unfamiliar environmental 
+conditions, offering insights into their respective decision-making capabilities.
+
+The algorithms were classified into performance categories such as efficiency, safety, and adaptability, providing a clear understanding of 
+their strengths and weaknesses. 
+During the evaluation phase, agents trained with DQN and Social Attention Mechanisms demonstrated superior adaptability, particularly 
+in dense traffic scenarios where metrics such as collision rates and episode lengths served as critical indicators of performance. 
+In contrast, certain combinations of algorithms and policies struggled under complex conditions, highlighting limitations in scalability and
+robustness. 
+
+
+

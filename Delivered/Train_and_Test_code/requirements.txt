@@ -1,0 +1,9 @@
+gymnasium==1.0.0
+
+highway-env==1.10.1
+
+rl-agents==1.0.dev0
+
+stable_baselines3==2.3.2
+
+

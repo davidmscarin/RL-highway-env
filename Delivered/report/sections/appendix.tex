@@ -1,0 +1,33 @@
+\subsection*{Running the train and test code}
+
+In order to run the Python train and test code follow these steps:
+
+\textbf{Set up the environment:} Ensure that Python is installed, and create a virtual environment to manage dependencies.
+(\texttt{virtualenv}, \texttt{pyenv} or \texttt{conda} can be used for this).
+
+\begin{verbatim}
+    $ cd Train_and_Test_code
+    $ pip install -r requirements.txt
+\end{verbatim}
+
+
+\begin{verbatim}
+    $ python train_intersection_dqn_cnn_multi.py
+\end{verbatim}
+
+The train generated models will be stored in a subdirectory \textbf{models}
+
+\textbf{Required Python Packages:} (Listed on \textit{requirements.txt}):
+\begin{quote}
+
+    gymnasium==1.0.0
+
+    highway\-env==1.10.1
+
+    rl-agents==1.0.dev0
+
+    stable\_baselines3==2.3.2
+
+\end{quote}
+
+
